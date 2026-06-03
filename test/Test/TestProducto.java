@@ -25,8 +25,8 @@ public class TestProducto {
         //tP.agregar();
         //tP.actualizar();
         //tP.SearchByID();
-        //tP.eliminar();
-        tP.cambiarEstado();
+        tP.eliminar();
+       // tP.cambiarEstado();
     }
 
     public static void listar() {
