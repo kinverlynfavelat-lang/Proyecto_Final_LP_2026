@@ -28,7 +28,7 @@ public class TestPedido {
 
     public static void main(String[] args) {
         TestPedido t = new TestPedido();
-        //t.generarPedido();
+        t.generarPedido();
         //t.listar();
         //t.buscarPedido();
         //t.actualizarEstado();
@@ -37,10 +37,10 @@ public class TestPedido {
     public void generarPedido() {
 
         Persona persona = new Persona();
-        persona.setId_persona(1); 
+        persona.setId_persona(8); 
 
         Producto prod1 = new Producto();
-        prod1.setId_producto(1);
+        prod1.setId_producto(3);
 
         Producto prod2 = new Producto();
         prod2.setId_producto(1);
@@ -63,7 +63,7 @@ public class TestPedido {
 
         Pedido pedido = new Pedido();
 
-        pedido.setCodigo("PED002");
+        pedido.setCodigo("PED003");
         pedido.setTotal(68);
         pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
         pedido.setMetodoPago(MetodoPago.YAPE);

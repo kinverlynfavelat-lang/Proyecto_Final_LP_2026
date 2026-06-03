@@ -36,12 +36,12 @@ public class ProductoController extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        if (action == null) {
-            action = request.getQueryString();
-        }
-
         if (action != null) {
             action = action.trim().toLowerCase();
+        }
+
+        if (action == null || action.isEmpty()) {
+            action = "listar";
         }
 
         switch (action) {

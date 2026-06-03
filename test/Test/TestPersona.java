@@ -29,14 +29,14 @@ public class TestPersona {
     public void insert() {
         Persona p = new Persona();
 
-        p.setNombre("Kinverlyn Favela");
-        p.setDni("12345678");
-        p.setTelefono("935715194");
-        p.setEmail("kinverlyn@gmail.com");
-        p.setDireccion("Av. UPeU");
+        p.setNombre("Favela Segura");
+        p.setDni("60270510");
+        p.setTelefono("901400779");
+        p.setEmail("favela@gmail.com");
+        p.setDireccion("Por la plaza");
 
         Usuario u = new Usuario();
-        u.setPassword("admin123");
+        u.setPassword("favela123");
         
         int result = dao.insert(p, u);
         if (result > 0) {
@@ -49,7 +49,7 @@ public class TestPersona {
     }
 
     public void valiUser() {
-        Usuario u = Udao.validate("kinverlyn@gmail.com", "admin123");
+        Usuario u = Udao.validate("favela@gmail.com", "favela123");
         if (u != null && u.getPersona() != null) {
             System.out.println("Bienvenido " + u.getPersona().getNombre());
             System.out.println("Rol:" + u.getRol());
