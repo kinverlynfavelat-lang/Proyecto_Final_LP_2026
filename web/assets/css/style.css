@@ -1,0 +1,38 @@
+body {
+    background-color: #f5f5f5;
+}
+
+/* HEADER */
+.navbar {
+    background-color: #e9d3a3 !important;
+}
+
+/* TITULO */
+h2 {
+    font-weight: 700;
+}
+
+/* CARDS PRODUCTOS */
+.card-pro {
+    background: #eaeaea;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.card-pro:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.card-pro img {
+    width: 100px;
+    height: auto;
+}
+
+/* TEXTO PRODUCTO */
+.card-pro p {
+    margin-top: 10px;
+    font-size: 14px;
+}

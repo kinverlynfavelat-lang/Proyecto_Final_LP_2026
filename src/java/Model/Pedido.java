@@ -4,7 +4,9 @@
  */
 package Model;
 
-import java.sql.Timestamp;
+import Enums.EstadoPedido;
+import Enums.MetodoPago;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -13,35 +15,48 @@ import java.util.List;
  */
 public class Pedido {
 
-    private int id_pedido;
+    private int idPedido;
     private String codigo;
-    private Persona persona;
-    private double total;
+    private LocalDateTime fecha;
     private EstadoPedido estadoPedido;
-    private Timestamp fecha;
     private MetodoPago metodoPago;
-    private List<DetallePedido> detallePedido;
+
+    private String nombreCliente;
+    private String dni;
+    private String telefono;
+    private String direccionEntrega;
+
+    private double total;
+
+    private Usuario usuario;
+    private List<Carrito> detallePedido;
+    private List<DetallePedido> detalles;
 
     public Pedido() {
     }
 
-    public Pedido(int id_pedido, String codigo, Persona persona, Double total, EstadoPedido estadoPedido, Timestamp fecha, MetodoPago metodoPago, List<DetallePedido> detallePedido) {
-        this.id_pedido = id_pedido;
+    public Pedido(int idPedido, String codigo, LocalDateTime fecha, EstadoPedido estadoPedido, MetodoPago metodoPago, String nombreCliente, String dni, String telefono, String direccionEntrega, double total, Usuario usuario, List<Carrito> detallePedido, List<DetallePedido> detalles) {
+        this.idPedido = idPedido;
         this.codigo = codigo;
-        this.persona = persona;
-        this.total = total;
-        this.estadoPedido = estadoPedido;
         this.fecha = fecha;
+        this.estadoPedido = estadoPedido;
         this.metodoPago = metodoPago;
+        this.nombreCliente = nombreCliente;
+        this.dni = dni;
+        this.telefono = telefono;
+        this.direccionEntrega = direccionEntrega;
+        this.total = total;
+        this.usuario = usuario;
         this.detallePedido = detallePedido;
+        this.detalles = detalles;
     }
 
-    public int getId_pedido() {
-        return id_pedido;
+    public int getIdPedido() {
+        return idPedido;
     }
 
-    public void setId_pedido(int id_pedido) {
-        this.id_pedido = id_pedido;
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
     public String getCodigo() {
@@ -52,22 +67,13 @@ public class Pedido {
         this.codigo = codigo;
     }
 
-    public Persona getPersona() {
-        return persona;
+    public LocalDateTime getFecha() {
+        return fecha;
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
 
     public EstadoPedido getEstadoPedido() {
         return estadoPedido;
@@ -75,14 +81,6 @@ public class Pedido {
 
     public void setEstadoPedido(EstadoPedido estadoPedido) {
         this.estadoPedido = estadoPedido;
-    }
-
-    public Timestamp getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Timestamp fecha) {
-        this.fecha = fecha;
     }
 
     public MetodoPago getMetodoPago() {
@@ -93,15 +91,70 @@ public class Pedido {
         this.metodoPago = metodoPago;
     }
 
-    public List<DetallePedido> getDetallePedido() {
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getDireccionEntrega() {
+        return direccionEntrega;
+    }
+
+    public void setDireccionEntrega(String direccionEntrega) {
+        this.direccionEntrega = direccionEntrega;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Carrito> getDetallePedido() {
         return detallePedido;
     }
 
-    public void setDetallePedido(List<DetallePedido> detallePedido) {
+    public void setDetallePedido(List<Carrito> detallePedido) {
         this.detallePedido = detallePedido;
     }
-    
+
+    public List<DetallePedido> getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(List<DetallePedido> detalles) {
+        this.detalles = detalles;
+    }
 
     
-    
+
 }

@@ -12,6 +12,8 @@ import Model.Usuario;
  */
 public interface IUsuario {
 
-    public Usuario validate(String user, String passw);
+    boolean registrar(Usuario usuario);
+
+    Usuario iniciarSesion(String correo, String password);
 
 }

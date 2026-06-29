@@ -3,13 +3,46 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
 -->
-<html>
+<html lang="es">
     <head>
-        <title>TODO supply a title</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>Mishel y Kinverlyn</div>
-    </body>
+        <title>Tienda Pro</title>
+        <!-- llamando a otro html  -->
+    <div id="head-placeholder"></div> 
+</head>
+<body>
+    <header id="header-placeholder"></header>
+    <main>
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                         class="d-block w-100" style="height: 450px; object-fit: cover;" alt="Hero">
+                </div>
+            </div>
+        </div>
+        
+        <section class="container mt-5 mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-secondary">Nuestros productos</h2>
+                <div class="badge bg-info text-white p-2">Explora lo nuevo</div>
+            </div>
+            <div class="row g-4" id="lista-productos">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-info" role="status"></div>
+                    <p>Cargando catalogo de productos...</p>
+                </div>
+            </div>
+            
+            
+            
+        </section>
+
+
+    </main>
+    <footer id="footer-placeholder"></footer>
+
+    <script src="assets/js/main.js"></script>
+
+</body>
 </html>

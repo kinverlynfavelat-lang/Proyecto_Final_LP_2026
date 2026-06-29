@@ -1,34 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controllers;
 
 import Dao.ProductoDaoImpl;
+import Enums.EstadoProducto;
 import Interface.IProducto;
-import Model.EstadoProducto;
 import Model.Producto;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+import jakarta.servlet.http.Part;
 
-/**
- *
- * @author kinve
- */
+@MultipartConfig
 @WebServlet(name = "ProductoController", urlPatterns = {"/ProductoController"})
 public class ProductoController extends HttpServlet {
 
     private final IProducto pDao = new ProductoDaoImpl();
-
     private final Gson gson = new Gson();
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("application/json");
@@ -36,129 +33,412 @@ public class ProductoController extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        if (action != null) {
-            action = action.trim().toLowerCase();
-        }
-
-        if (action == null || action.isEmpty()) {
+        if (action == null || action.trim().isEmpty()) {
             action = "listar";
         }
 
         switch (action) {
+
             case "guardar":
-                guardarProductos(request, response);
-
+                guardarProducto(request, response);
                 break;
+
             case "editar":
-                editarProductos(request, response);
-
+                editarProducto(request, response);
                 break;
-            case "eliminar":
-                eliminarProductos(request, response);
 
-                break;
             case "buscar":
-                buscarProductos(request, response);
-
+                buscarProducto(request, response);
                 break;
+
+            case "cambiarEstado":
+                cambiarEstado(request, response);
+                break;
+
             default:
                 listarProductos(request, response);
                 break;
         }
+    }
+
+    //=========================================
+    // LISTAR PRODUCTOS
+    //=========================================
+    private void listarProductos(HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
+
+        JsonObject jsonResponse = new JsonObject();
+
+        try {
+
+            List<Producto> lista = pDao.listar();
+
+            jsonResponse.addProperty("success", true);
+            jsonResponse.add("data", gson.toJsonTree(lista));
+
+        } catch (Exception e) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message",
+                    "Error al listar productos.");
+
+        }
+
+        response.getWriter().print(jsonResponse.toString());
+
+    }
+        //=========================================
+    // GUARDAR PRODUCTO
+    //=========================================
+    private void guardarProducto(HttpServletRequest request,
+            HttpServletResponse response)
+            throws IOException {
+
+        JsonObject jsonResponse = new JsonObject();
+
+        try {
+
+            Producto producto = new Producto();
+
+            String nombre = request.getParameter("nombre");
+            String descripcion = request.getParameter("descripcion");
+            String precio = request.getParameter("precio");
+
+            //==============================
+            // VALIDACIONES
+            //==============================
+
+            if (nombre == null || nombre.trim().isEmpty()) {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Ingrese el nombre del producto.");
+
+                response.getWriter().print(jsonResponse.toString());
+                return;
+
+            }
+
+            if (descripcion == null || descripcion.trim().isEmpty()) {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Ingrese la descripción.");
+
+                response.getWriter().print(jsonResponse.toString());
+                return;
+
+            }
+
+            if (precio == null || precio.trim().isEmpty()) {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Ingrese el precio.");
+
+                response.getWriter().print(jsonResponse.toString());
+                return;
+
+            }
+
+            double precioProducto = Double.parseDouble(precio);
+
+            if (precioProducto <= 0) {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "El precio debe ser mayor a cero.");
+
+                response.getWriter().print(jsonResponse.toString());
+                return;
+
+            }
+
+            producto.setNombre(nombre.trim());
+            producto.setDescripcion(descripcion.trim());
+            producto.setPrecio(precioProducto);
+
+            //==============================
+            // IMAGEN
+            //==============================
+
+            Part part = request.getPart("imagen");
+
+            if (part == null || part.getSize() == 0) {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Debe seleccionar una imagen.");
+
+                response.getWriter().print(jsonResponse.toString());
+                return;
+
+            }
+
+            String fileName = part.getSubmittedFileName();
+
+            String uploadPath = getServletContext().getRealPath("/")
+                    + "assets/img/productos";
+
+            File carpeta = new File(uploadPath);
+
+            if (!carpeta.exists()) {
+                carpeta.mkdirs();
+            }
+
+            part.write(uploadPath + File.separator + fileName);
+
+            producto.setImagen("assets/img/productos/" + fileName);
+
+            // Al registrar siempre inicia ACTIVO
+            producto.setEstadoProducto(EstadoProducto.ACTIVO);
+
+            boolean registrado = pDao.insertar(producto);
+
+            jsonResponse.addProperty("success", registrado);
+
+            if (registrado) {
+
+                jsonResponse.addProperty("message",
+                        "Producto registrado correctamente.");
+
+            } else {
+
+                jsonResponse.addProperty("message",
+                        "No fue posible registrar el producto.");
+
+            }
+
+        } catch (NumberFormatException e) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message",
+                    "El precio debe ser un número válido.");
+
+        } catch (Exception e) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message",
+                    "Error: " + e.getMessage());
+
+        }
+
+        response.getWriter().print(jsonResponse.toString());
+
+    }
+    private void editarProducto(HttpServletRequest request,
+        HttpServletResponse response) throws IOException {
+
+    JsonObject jsonResponse = new JsonObject();
+
+    try {
+
+        int idProducto = Integer.parseInt(request.getParameter("idProducto"));
+
+        Producto producto = pDao.buscarPorId(idProducto);
+
+        if (producto == null) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Producto no encontrado");
+
+            response.getWriter().print(jsonResponse.toString());
+            return;
+
+        }
+
+        String nombre = request.getParameter("nombre");
+        String descripcion = request.getParameter("descripcion");
+        String precio = request.getParameter("precio");
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "El nombre es obligatorio");
+
+            response.getWriter().print(jsonResponse.toString());
+            return;
+
+        }
+
+        if (descripcion == null || descripcion.trim().isEmpty()) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "La descripción es obligatoria");
+
+            response.getWriter().print(jsonResponse.toString());
+            return;
+
+        }
+
+        if (precio == null || precio.trim().isEmpty()) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "El precio es obligatorio");
+
+            response.getWriter().print(jsonResponse.toString());
+            return;
+
+        }
+
+        double precioProducto = Double.parseDouble(precio);
+
+        if (precioProducto <= 0) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "El precio debe ser mayor que cero");
+
+            response.getWriter().print(jsonResponse.toString());
+            return;
+
+        }
+
+        producto.setNombre(nombre.trim());
+        producto.setDescripcion(descripcion.trim());
+        producto.setPrecio(precioProducto);
+
+        Part part = request.getPart("imagen");
+
+        if (part != null && part.getSize() > 0) {
+
+            String fileName = part.getSubmittedFileName();
+
+            String uploadPath = getServletContext().getRealPath("/")
+                    + "assets/img/productos";
+
+            File carpeta = new File(uploadPath);
+
+            if (!carpeta.exists()) {
+                carpeta.mkdirs();
+            }
+
+            part.write(uploadPath + File.separator + fileName);
+
+            producto.setImagen("assets/img/productos/" + fileName);
+
+        }
+
+        boolean actualizado = pDao.actualizar(producto);
+
+        jsonResponse.addProperty("success", actualizado);
+        jsonResponse.addProperty("message",
+                actualizado
+                ? "Producto actualizado correctamente"
+                : "No fue posible actualizar el producto");
+
+    } catch (NumberFormatException e) {
+
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("message", "Precio inválido");
+
+    } catch (Exception e) {
+
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("message", "Error: " + e.getMessage());
 
     }
 
-    private void listarProductos(HttpServletRequest request, HttpServletResponse response)
+    response.getWriter().print(jsonResponse.toString());
+
+}
+        private void buscarProducto(HttpServletRequest request,
+            HttpServletResponse response)
             throws IOException {
-        List<Producto> productos = pDao.lista();
-        response.getWriter().print(gson.toJson(productos));
+
+        JsonObject jsonResponse = new JsonObject();
+
+        try {
+
+            int idProducto = Integer.parseInt(request.getParameter("idProducto"));
+
+            Producto producto = pDao.buscarPorId(idProducto);
+
+            if (producto != null) {
+
+                response.getWriter().print(gson.toJson(producto));
+
+            } else {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Producto no encontrado");
+
+                response.getWriter().print(jsonResponse.toString());
+
+            }
+
+        } catch (Exception e) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message",
+                    "Error: " + e.getMessage());
+
+            response.getWriter().print(jsonResponse.toString());
+
+        }
 
     }
 
-    private void guardarProductos(HttpServletRequest request, HttpServletResponse response)
+    private void cambiarEstado(HttpServletRequest request,
+            HttpServletResponse response)
             throws IOException {
 
-        Producto p = new Producto();
+        JsonObject jsonResponse = new JsonObject();
 
-        p.setNombre(request.getParameter("nombre"));
-        p.setDescripcion(request.getParameter("descripcion"));
-        p.setPrecio(Double.parseDouble(request.getParameter("precio")));
-        p.setImagen(request.getParameter("imagen"));
-        p.setEstado(EstadoProducto.valueOf(request.getParameter("estado").toUpperCase()));
+        try {
 
-        boolean result = pDao.insert(p);
+            int idProducto = Integer.parseInt(request.getParameter("idProducto"));
 
-        response.getWriter().print(gson.toJson(result));
-    }
+            EstadoProducto estado = EstadoProducto.valueOf(
+                    request.getParameter("estadoProducto").toUpperCase()
+            );
 
-    private void editarProductos(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            boolean cambiado = pDao.cambiarEstado(idProducto, estado);
 
-        Producto p = new Producto();
+            jsonResponse.addProperty("success", cambiado);
 
-        p.setId_producto(Integer.parseInt(request.getParameter("id_producto")));
+            if (cambiado) {
 
-        p.setNombre(request.getParameter("nombre"));
-        p.setDescripcion(request.getParameter("descripcion"));
-        p.setPrecio(Double.parseDouble(request.getParameter("precio")));
-        p.setImagen(request.getParameter("imagen"));
-        p.setEstado(EstadoProducto.valueOf(request.getParameter("estado").toUpperCase()));
+                jsonResponse.addProperty("message",
+                        "Estado del producto actualizado correctamente");
 
-        boolean result = pDao.update(p);
+            } else {
 
-        response.getWriter().print(gson.toJson(result));
-    }
+                jsonResponse.addProperty("message",
+                        "No fue posible actualizar el estado");
 
-    private void eliminarProductos(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            }
 
-        int id = Integer.parseInt(request.getParameter("id"));
+        } catch (Exception e) {
 
-        boolean result = pDao.updateEstado(id, EstadoProducto.INACTIVO);
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message",
+                    "Error: " + e.getMessage());
 
-        response.getWriter().print(gson.toJson(result));
+        }
 
-    }
-
-    private void buscarProductos(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        int id = Integer.parseInt(request.getParameter("id"));
-
-        Producto p = pDao.SearchById(id);
-
-        response.getWriter().print(gson.toJson(p));
+        response.getWriter().print(jsonResponse.toString());
 
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
+
         processRequest(request, response);
+
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
+
         processRequest(request, response);
+
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+
+        return "ProductoController BurgerBuilder";
+
+    }
 
 }

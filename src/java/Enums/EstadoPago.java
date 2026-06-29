@@ -2,15 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Model;
+package Enums;
 
 /**
  *
  * @author kinve
  */
-public enum EstadoComprobante {
+public enum EstadoPago {
     
-    EN_VALIDACION,
-    APROBADO,
+    PENDIENTE,
+    VALIDADO,
     RECHAZADO
 }

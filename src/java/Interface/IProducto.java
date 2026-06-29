@@ -4,7 +4,7 @@
  */
 package Interface;
 
-import Model.EstadoProducto;
+import Enums.EstadoProducto;
 import Model.Producto;
 import java.util.List;
 
@@ -13,16 +13,14 @@ import java.util.List;
  * @author kinve
  */
 public interface IProducto {
-    
-     public List<Producto> lista();
 
-    public boolean insert(Producto p);
+    List<Producto> listar();
 
-    public boolean update(Producto p);
+    boolean insertar(Producto producto);
 
-    public Producto SearchById(int id);
+    boolean actualizar(Producto producto);
 
-    public boolean delete(int id);
-    
-    public boolean updateEstado(int id, EstadoProducto estado);
+    Producto buscarPorId(int idProducto);
+
+    boolean cambiarEstado(int idProducto, EstadoProducto estado);
 }

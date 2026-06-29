@@ -5,135 +5,215 @@
 package Test;
 
 import Dao.PedidoDaoImpl;
+import Enums.EstadoPedido;
+import Enums.MetodoPago;
 import Interface.IPedido;
-import Model.DetallePedido;
-import Model.EstadoPedido;
-import Model.MetodoPago;
+import Model.Carrito;
+import Model.Ingrediente;
 import Model.Pedido;
-import Model.Persona;
 import Model.Producto;
+import Model.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author kinve
- */
 public class TestPedido {
 
-    /**
-     * @param args the command line arguments
-     */
     IPedido dao = new PedidoDaoImpl();
 
     public static void main(String[] args) {
+
         TestPedido t = new TestPedido();
+
         t.generarPedido();
         //t.listar();
-        //t.buscarPedido();
+        //t.buscarPorId();
         //t.actualizarEstado();
+        //t.historial();
     }
-
+    
     public void generarPedido() {
 
-        Persona persona = new Persona();
-        persona.setId_persona(8); 
+    Pedido pedido = new Pedido();
 
-        Producto prod1 = new Producto();
-        prod1.setId_producto(3);
+    pedido.setCodigo("PED-00029");
 
-        Producto prod2 = new Producto();
-        prod2.setId_producto(1);
+    pedido.setEstadoPedido(EstadoPedido.ENTREGADO);
 
-        List<DetallePedido> detalles = new ArrayList<>();
+    pedido.setMetodoPago(MetodoPago.YAPE);
 
-        DetallePedido d1 = new DetallePedido();
-        d1.setCantidad(2);
-        d1.setPrecio_unitario(25);
-        d1.setPersonalizacion("Sin cebolla");
-        d1.setProducto(prod1);
-        detalles.add(d1);
+    pedido.setNombreCliente("Juan Perez");
 
-        DetallePedido d2 = new DetallePedido();
-        d2.setCantidad(1);
-        d2.setPrecio_unitario(18);
-        d2.setPersonalizacion("Extra queso");
-        d2.setProducto(prod2);
-        detalles.add(d2);
+    pedido.setDni("12345678");
 
-        Pedido pedido = new Pedido();
+    pedido.setTelefono("987654321");
 
-        pedido.setCodigo("PED003");
-        pedido.setTotal(68);
-        pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
-        pedido.setMetodoPago(MetodoPago.YAPE);
-        pedido.setPersona(persona);
-        pedido.setDetallePedido(detalles);
+    pedido.setDireccionEntrega("Av. Perú 123");
 
-        int idGenerado = dao.generarPedido(pedido);
+    Usuario u = new Usuario();
 
-        if (idGenerado > 0) {
-            System.out.println("Pedido registrado");
-            System.out.println("ID Pedido: " + idGenerado);
+    u.setIdUsuario(1);
 
-        } else {
-            System.out.println("Error al registrar pedido");
-        }
+    pedido.setUsuario(u);
+
+    //---------------------------------------
+    // Producto 1
+    //---------------------------------------
+
+    Producto p1 = new Producto();
+
+    p1.setIdProducto(1);
+
+    Carrito item1 = new Carrito();
+
+    item1.setProducto(p1);
+
+    item1.setCantidad(2);
+
+    item1.setPrecioCompra(18.50);
+
+    item1.setSubTotal(37.00);
+
+    //---------------------------------------
+    // Ingredientes del producto 1
+    //---------------------------------------
+
+    Ingrediente i1 = new Ingrediente();
+
+    i1.setIdIngrediente(1);
+
+    Ingrediente i2 = new Ingrediente();
+
+    i2.setIdIngrediente(2);
+
+    List<Ingrediente> ingredientes = new ArrayList<>();
+
+    ingredientes.add(i1);
+
+    ingredientes.add(i2);
+
+    item1.setIngredientes(ingredientes);
+
+    
+
+    //---------------------------------------
+    // Carrito
+    //---------------------------------------
+
+    List<Carrito> carrito = new ArrayList<>();
+
+    carrito.add(item1);
+
+
+    pedido.setDetallePedido(carrito);
+
+    //---------------------------------------
+
+    pedido.setTotal(45.00);
+
+    int id = dao.generarPedido(pedido);
+
+    if (id > 0) {
+
+        System.out.println("Pedido registrado correctamente");
+
+        System.out.println("ID generado: " + id);
+
+    } else {
+
+        System.out.println("Error al registrar pedido");
 
     }
+
+}
 
     public void listar() {
 
-        List<Pedido> lista = dao.lista();
+        List<Pedido> lista = dao.listar();
 
         if (lista != null && !lista.isEmpty()) {
 
             for (Pedido p : lista) {
 
-                System.out.println("ID: " + p.getId_pedido());
-                System.out.println("Codigo: " + p.getCodigo());
-                System.out.println("Total: " + p.getTotal());
+                System.out.println("---------------------");
+
+                System.out.println("ID: " + p.getIdPedido());
+
+                System.out.println("Código: " + p.getCodigo());
+
+                System.out.println("Cliente: " + p.getNombreCliente());
+
                 System.out.println("Estado: " + p.getEstadoPedido());
-                System.out.println("Metodo Pago: " + p.getMetodoPago());
-                System.out.println("----------------------");
+
+                System.out.println("Método: " + p.getMetodoPago());
+
+                System.out.println("Total: " + p.getTotal());
 
             }
 
         } else {
-            System.out.println("No hay pedidos");
+
+            System.out.println("No existen pedidos.");
+
         }
+
     }
 
-    public void buscarPedido() {
+    public void buscarPorId() {
 
-        Pedido p = dao.SearchById(1);
+        Pedido p = dao.buscarPorId(1);
 
         if (p != null) {
 
             System.out.println("Pedido encontrado");
-            System.out.println("ID: " + p.getId_pedido());
-            System.out.println("Codigo: " + p.getCodigo());
-            System.out.println("Total: " + p.getTotal());
+
+            System.out.println("Código: " + p.getCodigo());
+
+            System.out.println("Cliente: " + p.getNombreCliente());
+
             System.out.println("Estado: " + p.getEstadoPedido());
 
         } else {
+
             System.out.println("Pedido no encontrado");
+
         }
+
     }
 
     public void actualizarEstado() {
 
-        Pedido p = new Pedido();
-
-        p.setId_pedido(1);
-        p.setEstadoPedido(EstadoPedido.EN_PREPARACION);
-
-        boolean r = dao.updateEstado(p);
+        boolean r = dao.actualizarEstado(1, EstadoPedido.EN_PREPARACION);
 
         if (r) {
+
             System.out.println("Estado actualizado");
+
         } else {
-            System.out.println("Error al actualizar");
+
+            System.out.println("No se pudo actualizar");
+
         }
+    }
+
+    public void historial() {
+
+        List<Pedido> lista = dao.historialCliente(1);
+
+        if (lista != null) {
+
+            for (Pedido p : lista) {
+
+                System.out.println(p.getCodigo());
+
+                System.out.println(p.getEstadoPedido());
+
+                System.out.println(p.getTotal());
+
+                System.out.println("----------------");
+
+            }
+            System.out.println("No hay pedidos");
+        }
+
     }
 }

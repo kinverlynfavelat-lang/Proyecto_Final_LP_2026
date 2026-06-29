@@ -5,7 +5,7 @@
 package Dao;
 
 import Interface.IProducto;
-import Model.EstadoProducto;
+import Enums.EstadoProducto;
 import Model.Producto;
 import Util.ConexionSingleton;
 import java.util.List;
@@ -21,78 +21,95 @@ public class ProductoDaoImpl implements IProducto {
     private Connection cn;
 
     @Override
-    public List<Producto> lista() {
-
+    public List<Producto> listar() {
         List<Producto> lista = null;
         Producto pr;
+
         PreparedStatement st;
         ResultSet rs;
+
         String query = null;
 
         try {
-            query = "SELECT id_producto,nombre,descripcion,"
-                    + " precio,imagen,estado FROM producto";
+
+            query = "SELECT idProducto, nombre, descripcion, precio, imagen, estadoProducto "
+                    + "FROM PRODUCTO";
 
             lista = new ArrayList<>();
 
             cn = ConexionSingleton.getConnection();
+
             st = cn.prepareStatement(query);
+
             rs = st.executeQuery();
+
             while (rs.next()) {
+
                 pr = new Producto();
-                pr.setId_producto(rs.getInt("id_producto"));
+
+                pr.setIdProducto(rs.getInt("idProducto"));
                 pr.setNombre(rs.getString("nombre"));
                 pr.setDescripcion(rs.getString("descripcion"));
                 pr.setPrecio(rs.getDouble("precio"));
                 pr.setImagen(rs.getString("imagen"));
-                pr.setEstado(
+
+                pr.setEstadoProducto(
                         EstadoProducto.valueOf(
-                                rs.getString("estado").toUpperCase()
-                        )    
+                                rs.getString("estadoProducto").toUpperCase()
+                        )
                 );
+
                 lista.add(pr);
 
             }
 
         } catch (Exception e) {
-            System.out.println("Error al listar el producto" + e.getMessage());
+
+            System.out.println("Error al listar productos " + e.getMessage());
+
             try {
                 cn.rollback();
             } catch (Exception ex) {
             }
-            System.out.println("No se pudo listar el producto");
+
+            System.out.println("No se pudieron listar los productos");
+
         } finally {
+
             if (cn != null) {
                 try {
 
                 } catch (Exception ex) {
                 }
             }
-        }
-        return lista;
 
+        }
+
+        return lista;
     }
 
     @Override
-    public boolean insert(Producto p) {
+    public boolean insertar(Producto producto) {
         boolean flag = false;
+
         PreparedStatement st;
         String query = null;
 
         try {
 
-            query = "INSERT INTO producto(nombre, descripcion, precio, imagen, estado)"
-                    + " VALUES(?,?,?,?,?)";
+            query = "INSERT INTO PRODUCTO(nombre, descripcion, precio, imagen, estadoProducto) "
+                    + "VALUES(?,?,?,?,?)";
 
             cn = ConexionSingleton.getConnection();
 
             st = cn.prepareStatement(query);
 
-            st.setString(1, p.getNombre());
-            st.setString(2, p.getDescripcion());
-            st.setDouble(3, p.getPrecio());
-            st.setString(4, p.getImagen());
-            st.setString(5, p.getEstado().name());
+            st.setString(1, producto.getNombre());
+            st.setString(2, producto.getDescripcion());
+            st.setDouble(3, producto.getPrecio());
+            st.setString(4, producto.getImagen());
+            st.setString(5, producto.getEstadoProducto().name());
+
             st.executeUpdate();
 
             flag = true;
@@ -107,6 +124,7 @@ public class ProductoDaoImpl implements IProducto {
             }
 
             flag = false;
+
             System.out.println("No se pudo insertar el producto");
 
         } finally {
@@ -115,35 +133,38 @@ public class ProductoDaoImpl implements IProducto {
                 try {
 
                 } catch (Exception ex) {
-                    System.out.println("Error al cerrar conexion");
+                    System.out.println("Error al cerrar conexión");
                 }
             }
+
         }
 
         return flag;
     }
 
     @Override
-    public boolean update(Producto p) {
+    public boolean actualizar(Producto producto) {
         boolean flag = false;
+
         PreparedStatement st;
         String query = null;
 
         try {
 
-            query = "UPDATE producto SET nombre=?, descripcion=?, precio=?, imagen=?, estado=? "
-                    + "WHERE id_producto=?";
+            query = "UPDATE PRODUCTO "
+                    + "SET nombre=?, descripcion=?, precio=?, imagen=?, estadoProducto=? "
+                    + "WHERE idProducto=?";
 
             cn = ConexionSingleton.getConnection();
 
             st = cn.prepareStatement(query);
 
-            st.setString(1, p.getNombre());
-            st.setString(2, p.getDescripcion());
-            st.setDouble(3, p.getPrecio());
-            st.setString(4, p.getImagen());
-            st.setString(5, p.getEstado().name());
-            st.setInt(6, p.getId_producto());
+            st.setString(1, producto.getNombre());
+            st.setString(2, producto.getDescripcion());
+            st.setDouble(3, producto.getPrecio());
+            st.setString(4, producto.getImagen());
+            st.setString(5, producto.getEstadoProducto().name());
+            st.setInt(6, producto.getIdProducto());
 
             st.executeUpdate();
 
@@ -159,6 +180,7 @@ public class ProductoDaoImpl implements IProducto {
             }
 
             flag = false;
+
             System.out.println("No se pudo actualizar el producto");
 
         } finally {
@@ -167,43 +189,46 @@ public class ProductoDaoImpl implements IProducto {
                 try {
 
                 } catch (Exception ex) {
-                    System.out.println("Error al cerrar conexion");
+                    System.out.println("Error al cerrar conexión");
                 }
             }
+
         }
 
         return flag;
-
     }
 
     @Override
-    public Producto SearchById(int id) {
+    public Producto buscarPorId(int idProducto) {
         Producto pr = null;
+
         PreparedStatement st;
         ResultSet rs;
         String query = null;
 
         try {
 
-            query = "SELECT * FROM producto WHERE id_producto=?";
+            query = "SELECT * FROM PRODUCTO WHERE idProducto=?";
 
             cn = ConexionSingleton.getConnection();
 
             st = cn.prepareStatement(query);
 
-            st.setInt(1, id);
+            st.setInt(1, idProducto);
+
             rs = st.executeQuery();
-            while (rs.next()) {
+
+            if (rs.next()) {
+
                 pr = new Producto();
-                pr.setId_producto(rs.getInt("id_producto"));
+
+                pr.setIdProducto(rs.getInt("idProducto"));
                 pr.setNombre(rs.getString("nombre"));
                 pr.setDescripcion(rs.getString("descripcion"));
                 pr.setPrecio(rs.getDouble("precio"));
                 pr.setImagen(rs.getString("imagen"));
-               pr.setEstado(
-                        EstadoProducto.valueOf(
-                                rs.getString("estado").toUpperCase()
-                        )    
+                pr.setEstadoProducto(
+                        EstadoProducto.valueOf(rs.getString("estadoProducto"))
                 );
 
             }
@@ -223,70 +248,32 @@ public class ProductoDaoImpl implements IProducto {
                 try {
 
                 } catch (Exception ex) {
-                    System.out.println("Error al cerrar conexion");
+                    System.out.println("Error al cerrar conexión");
                 }
             }
+
         }
 
         return pr;
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean cambiarEstado(int idProducto, EstadoProducto estado) {
         boolean flag = false;
+
         PreparedStatement st;
         String query = null;
 
         try {
 
-            query = "DELETE FROM producto WHERE id_producto=?";
+            query = "UPDATE PRODUCTO SET estadoProducto=? WHERE idProducto=?";
 
             cn = ConexionSingleton.getConnection();
+
             st = cn.prepareStatement(query);
-            st.setInt(1, id);
-            st.executeUpdate();
 
-            flag = true;
-
-        } catch (Exception e) {
-
-            System.out.println("Error al eliminar producto " + e.getMessage());
-
-            try {
-                cn.rollback();
-            } catch (Exception ex) {
-            }
-
-            flag = false;
-
-        } finally {
-
-            if (cn != null) {
-                try {
-
-                } catch (Exception ex) {
-                    System.out.println("Error al cerrar conexion");
-                }
-            }
-        }
-
-        return flag;
-    }
-
-    @Override
-    public boolean updateEstado(int id, EstadoProducto estado) {
-        boolean flag = false;
-        PreparedStatement st;
-        String query = null;
-
-        try {
-
-            query = "UPDATE producto SET estado=? WHERE id_producto=?";
-
-            cn = ConexionSingleton.getConnection();
-            st = cn.prepareStatement(query);
             st.setString(1, estado.name());
-            st.setInt(2, id);
+            st.setInt(2, idProducto);
 
             st.executeUpdate();
 
@@ -294,7 +281,7 @@ public class ProductoDaoImpl implements IProducto {
 
         } catch (Exception e) {
 
-            System.out.println("Error al actualizar estado " + e.getMessage());
+            System.out.println("Error al cambiar estado del producto " + e.getMessage());
 
             try {
                 cn.rollback();
@@ -307,11 +294,12 @@ public class ProductoDaoImpl implements IProducto {
 
             if (cn != null) {
                 try {
-                    cn.close();
+
                 } catch (Exception ex) {
-                    System.out.println("Error al cerrar conexion");
+                    System.out.println("Error al cerrar conexión");
                 }
             }
+
         }
 
         return flag;

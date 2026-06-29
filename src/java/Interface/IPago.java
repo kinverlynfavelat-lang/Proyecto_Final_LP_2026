@@ -4,16 +4,19 @@
  */
 package Interface;
 
-import Model.DetallePedido;
-import java.util.List;
+import Enums.EstadoPago;
+import Model.Pago;
 
 /**
  *
  * @author kinve
  */
-public interface IDetallePedido {
+public interface IPago {
 
-    public boolean insert(DetallePedido detalle);
+    boolean registrarPago(Pago pago);
 
-    public List<DetallePedido> listaByPedido(int idPedido);
+    Pago buscarPorPedido(int idPedido);
+
+    boolean validarPago(int idPago, EstadoPago estado);
+
 }

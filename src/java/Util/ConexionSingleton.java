@@ -17,11 +17,21 @@ public class ConexionSingleton {
     //metodo getConnection
     public static Connection getConnection() {
         try {
-            if (connection == null) {
+            if (connection == null || connection.isClosed()) {
+
                 Runtime.getRuntime().addShutdownHook(new getClose());
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://localhost/lp_2026", "root", "admin");
-                System.out.println("Entro al if");
+
+                // Driver Oracle JDBC
+                Class.forName("oracle.jdbc.OracleDriver");
+
+                // Conexion Oracle XE
+                connection = DriverManager.getConnection(
+                        "jdbc:oracle:thin:@localhost:1521/XE",
+                        "BurgerBuilder_BD",
+                        "admin1234"
+                );
+
+                System.out.println("Conectado a Oracle");
             }
             return connection;
 
@@ -35,12 +45,23 @@ public class ConexionSingleton {
 
         @Override
         public void run() {
-            try {
-                Connection conn = ConexionSingleton.getConnection();
-                conn.close();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+             try {
+
+            if (connection != null && !connection.isClosed()) {
+
+                connection.close();
+
+                System.out.println("Conexión cerrada.");
+
             }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+    
 
         }
 

@@ -4,37 +4,39 @@
  */
 package Model;
 
+import Enums.EstadoProducto;
+
 /**
  *
  * @author kinve
  */
 public class Producto {
-    
-    private int id_producto;
+
+    private int idProducto;
     private String nombre;
     private String descripcion;
     private double precio;
     private String imagen;
-    private EstadoProducto estado;
+    private EstadoProducto estadoProducto;
 
     public Producto() {
     }
 
-    public Producto(int id_producto, String nombre, String descripcion, double precio, String imagen, EstadoProducto estado) {
-        this.id_producto = id_producto;
+    public Producto(int idProducto, String nombre, String descripcion, double precio, String imagen, EstadoProducto estadoProducto) {
+        this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
         this.imagen = imagen;
-        this.estado = estado;
+        this.estadoProducto = estadoProducto;
     }
 
-    public int getId_producto() {
-        return id_producto;
+    public int getIdProducto() {
+        return idProducto;
     }
 
-    public void setId_producto(int id_producto) {
-        this.id_producto = id_producto;
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getNombre() {
@@ -69,13 +71,12 @@ public class Producto {
         this.imagen = imagen;
     }
 
-    public EstadoProducto getEstado() {
-        return estado;
+    public EstadoProducto getEstadoProducto() {
+        return estadoProducto;
     }
 
-    public void setEstado(EstadoProducto estado) {
-        this.estado = estado;
+    public void setEstadoProducto(EstadoProducto estadoProducto) {
+        this.estadoProducto = estadoProducto;
     }
 
-    
 }

@@ -4,37 +4,44 @@
  */
 package Model;
 
+import java.util.List;
+
 /**
  *
  * @author kinve
  */
 public class DetallePedido {
-    
-    private int id_detalle;
+
+    private int idDetalleP;
     private int cantidad;
-    private double precio_unitario;
-    private String personalizacion;
+    private double precioUnitario;
+    private double subTotal;
+
     private Pedido pedido;
     private Producto producto;
 
+    private List<Ingrediente> ingredientes;
     public DetallePedido() {
     }
 
-    public DetallePedido(int id_detalle, int cantidad, double precio_unitario, String personalizacion, Pedido pedido, Producto producto) {
-        this.id_detalle = id_detalle;
+    public DetallePedido(int idDetalleP, int cantidad, double precioUnitario, double subTotal, Pedido pedido, Producto producto, List<Ingrediente> ingredientes) {
+        this.idDetalleP = idDetalleP;
         this.cantidad = cantidad;
-        this.precio_unitario = precio_unitario;
-        this.personalizacion = personalizacion;
+        this.precioUnitario = precioUnitario;
+        this.subTotal = subTotal;
         this.pedido = pedido;
         this.producto = producto;
+        this.ingredientes = ingredientes;
     }
 
-    public int getId_detalle() {
-        return id_detalle;
+    
+
+    public int getIdDetalleP() {
+        return idDetalleP;
     }
 
-    public void setId_detalle(int id_detalle) {
-        this.id_detalle = id_detalle;
+    public void setIdDetalleP(int idDetalleP) {
+        this.idDetalleP = idDetalleP;
     }
 
     public int getCantidad() {
@@ -45,20 +52,20 @@ public class DetallePedido {
         this.cantidad = cantidad;
     }
 
-    public double getPrecio_unitario() {
-        return precio_unitario;
+    public double getPrecioUnitario() {
+        return precioUnitario;
     }
 
-    public void setPrecio_unitario(double precio_unitario) {
-        this.precio_unitario = precio_unitario;
+    public void setPrecioUnitario(double precioUnitario) {
+        this.precioUnitario = precioUnitario;
     }
 
-    public String getPersonalizacion() {
-        return personalizacion;
+    public double getSubTotal() {
+        return subTotal;
     }
 
-    public void setPersonalizacion(String personalizacion) {
-        this.personalizacion = personalizacion;
+    public void setSubTotal(double subTotal) {
+        this.subTotal = subTotal;
     }
 
     public Pedido getPedido() {
@@ -76,7 +83,15 @@ public class DetallePedido {
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
+
+    public List<Ingrediente> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<Ingrediente> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
     
     
-    
+
 }

@@ -1,121 +1,138 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package Test;
 
 import Dao.ProductoDaoImpl;
+import Enums.EstadoProducto;
 import Interface.IProducto;
-import Model.EstadoProducto;
 import Model.Producto;
 import java.util.List;
 
-/**
- *
- * @author kinve
- */
 public class TestProducto {
 
     public static IProducto dao = new ProductoDaoImpl();
 
     public static void main(String[] args) {
+
         TestProducto tP = new TestProducto();
 
         //tP.listar();
-        //tP.agregar();
+        tP.agregar();
         //tP.actualizar();
-        //tP.SearchByID();
-        //tP.eliminar();
-       // tP.cambiarEstado();
+        //tP.buscarPorId();
+        //tP.cambiarEstado();
+
     }
 
     public static void listar() {
-        List<Producto> Lista = dao.lista();
 
-        if (Lista != null && !Lista.isEmpty()) {
-            System.out.println("ID\tNombre\tPrecio\tStock");
-            for (Producto ps : Lista) {
-                System.out.println(ps.getId_producto()
-                        + "\t" + ps.getNombre() + "\t"
-                        + ps.getPrecio() + "\t" + ps.getEstado());
+        List<Producto> lista = dao.listar();
+
+        if (lista != null && !lista.isEmpty()) {
+
+            System.out.println("ID\tNombre\tPrecio\tEstado");
+
+            for (Producto p : lista) {
+
+                System.out.println(
+                        p.getIdProducto()
+                        + "\t" + p.getNombre()
+                        + "\t" + p.getPrecio()
+                        + "\t" + p.getEstadoProducto());
 
             }
+
         } else {
-            System.out.println(" NO HAY PRODUCTOS ");
+
+            System.out.println("NO HAY PRODUCTOS");
+
         }
 
     }
 
     public static void agregar() {
+
         Producto p = new Producto();
 
-        p.setNombre("Big Burger");
+        p.setNombre("Cheese Burger");
         p.setDescripcion("Hamburguesa doble carne con queso");
         p.setPrecio(22.90);
-        p.setImagen("img/bigburger.jpg");
-        p.setEstado(EstadoProducto.ACTIVO);
+        p.setImagen("img/cheeseburger.jpg");
+        p.setEstadoProducto(EstadoProducto.ACTIVO);
 
-        boolean result = dao.insert(p);
+        boolean result = dao.insertar(p);
 
         if (result) {
-            System.out.println(" PRODUCTO INSERTADO");
+
+            System.out.println("PRODUCTO INSERTADO");
+
         } else {
-            System.out.println(" |ERROR| No sé logró registrar");
+
+            System.out.println("|ERROR| No se logró registrar");
 
         }
+
     }
 
     public static void actualizar() {
+
         Producto p = new Producto();
-        
-         p.setNombre("Big Burger XL");
+
+        p.setIdProducto(1);
+        p.setNombre("Big Burger XL");
         p.setDescripcion("Hamburguesa doble carne especial");
         p.setPrecio(24.90);
         p.setImagen("img/bigburgerxl.jpg");
-        p.setEstado(EstadoProducto.ACTIVO);
-        p.setId_producto(1);
+        p.setEstadoProducto(EstadoProducto.ACTIVO);
 
-        boolean result = dao.update(p);
+        boolean result = dao.actualizar(p);
+
         if (result) {
-            System.out.println(" PRODUCTO ACTUALIZADO");
+
+            System.out.println("PRODUCTO ACTUALIZADO");
+
         } else {
-            System.out.println(" |ERROR| No sé logró actualizar");
 
-        }
-    }
+            System.out.println("|ERROR| No se logró actualizar");
 
-    public static void SearchByID() {
-        Producto pr = dao.SearchById(1);
-
-        if (pr != null) {
-            System.out.println("PRODUCTOS ENCONTRADOS");
-            System.out.println("ID:" + pr.getId_producto());
-            System.out.println("Nombre:" + pr.getNombre());
-            System.out.println("Descripcion:" + pr.getDescripcion());
-            System.out.println("Precio:" + pr.getPrecio());
-            System.out.println("Ruta Img:" + pr.getImagen());
-            System.out.println("Estado:" + pr.getEstado());
-        } else {
-            System.out.println("|ERROR| No hay registros");
         }
 
     }
 
-    public static void eliminar() {
-        boolean result = dao.delete(1);
-        if (result) {
-            System.out.println("PRODUCTO ELIMINADO");
+    public static void buscarPorId() {
+
+        Producto p = dao.buscarPorId(1);
+
+        if (p != null) {
+
+            System.out.println("PRODUCTO ENCONTRADO");
+            System.out.println("ID: " + p.getIdProducto());
+            System.out.println("Nombre: " + p.getNombre());
+            System.out.println("Descripción: " + p.getDescripcion());
+            System.out.println("Precio: " + p.getPrecio());
+            System.out.println("Imagen: " + p.getImagen());
+            System.out.println("Estado: " + p.getEstadoProducto());
+
         } else {
-            System.out.println(" |ERROR| No se logró eliminar");
+
+            System.out.println("|ERROR| No existe el producto.");
+
         }
+
     }
 
     public static void cambiarEstado() {
-        boolean result = dao.updateEstado(1, EstadoProducto.INACTIVO);
+
+        boolean result = dao.cambiarEstado(1, EstadoProducto.INACTIVO);
+
         if (result) {
-            System.out.println(" ESTADO ACTUALIZADO");
+
+            System.out.println("ESTADO ACTUALIZADO");
+
         } else {
-            System.out.println(" |ERROR| No sé logró actualizar el estado");
+
+            System.out.println("|ERROR| No se logró actualizar el estado.");
+
         }
+
     }
+
 }

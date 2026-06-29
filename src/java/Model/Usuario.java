@@ -4,6 +4,7 @@
  */
 package Model;
 
+import Enums.Rol;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -12,37 +13,46 @@ import java.security.NoSuchAlgorithmException;
  * @author kinve
  */
 public class Usuario {
-    private int id_usuario;
-    private String usuario;
+
+    private int idUsuario;
+    private String nombreCompleto;
+    private String correo;
     private String password;
     private Rol rol;
-    private Persona persona;
 
     public Usuario() {
     }
 
-    public Usuario(int id_usuario, String usuario, String password, Rol rol, Persona persona) {
-        this.id_usuario = id_usuario;
-        this.usuario = usuario;
+    public Usuario(int idUsuario, String nombreCompleto, String correo, String password, Rol rol) {
+        this.idUsuario = idUsuario;
+        this.nombreCompleto = nombreCompleto;
+        this.correo = correo;
         this.password = password;
         this.rol = rol;
-        this.persona = persona;
     }
 
-    public int getId_usuario() {
-        return id_usuario;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public String getUsuario() {
-        return usuario;
+    public String getNombreCompleto() {
+        return nombreCompleto;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getPassword() {
@@ -60,15 +70,8 @@ public class Usuario {
     public void setRol(Rol rol) {
         this.rol = rol;
     }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
     
+    //hashear, generar o encriptar una contraseña mediente un metodo
     public String HashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -88,4 +91,5 @@ public class Usuario {
             throw new RuntimeException("Error al generar el Catch", e);
         }
     }
+
 }

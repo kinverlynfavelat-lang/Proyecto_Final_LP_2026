@@ -1,12 +1,9 @@
 package Controllers;
 
-import Dao.PersonaDaoImpl;
 import Dao.UsuarioDaoImpl;
-import Interface.IPersona;
+import Enums.Rol;
 import Interface.IUsuario;
-import Model.Persona;
 import Model.Usuario;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,27 +18,34 @@ import jakarta.servlet.http.HttpSession;
 public class AuthController extends HttpServlet {
 
     private final IUsuario uDao = new UsuarioDaoImpl();
-    private final IPersona pDao = new PersonaDaoImpl();
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("text/html;charset=UTF-8");
+
+        try (PrintWriter out = response.getWriter()) {
+
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>AuthController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet AuthController</h1>");
+            out.println("</body>");
+            out.println("</html>");
+
+        }
+
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String action = request.getParameter("action");
+        processRequest(request, response);
 
-        if ("logout".equals(action)) {
-
-            HttpSession session = request.getSession(false);
-
-            if (session != null) {
-                session.invalidate();
-            }
-
-            response.sendRedirect("login.jsp");
-
-        } else {
-            response.sendRedirect("login.jsp");
-        }
     }
 
     @Override
@@ -54,91 +58,185 @@ public class AuthController extends HttpServlet {
         String action = request.getParameter("action");
 
         JsonObject jsonResponse = new JsonObject();
-        Gson gson = new Gson();
 
         try (PrintWriter out = response.getWriter()) {
 
-            if ("validar".equals(action)) {
+            // Validar acción
 
-                String usuario = request.getParameter("usuario");
-                String password = request.getParameter("password");
-
-                Usuario us = uDao.validate(usuario, password);
-
-                if (us != null && us.getUsuario() != null) {
-
-                    HttpSession session = request.getSession(true);
-
-                    session.setAttribute("usuario", us);
-                    session.setAttribute("rol", us.getRol());
-
-                    jsonResponse.addProperty("success", true);
-                    jsonResponse.addProperty("message", "Inicio de sesión exitoso");
-                    jsonResponse.addProperty("rol", us.getRol().name());
-
-                    jsonResponse.add(
-                            "userData",
-                            gson.toJsonTree(us)
-                    );
-
-                } else {
-
-                    jsonResponse.addProperty("success", false);
-                    jsonResponse.addProperty("message",
-                            "Usuario o contraseña incorrecta");
-                }
-
-                out.print(jsonResponse.toString());
-
-            } else if ("register".equals(action)) {
-
-                Persona p = new Persona();
-                Usuario u = new Usuario();
-
-                p.setNombre(request.getParameter("nombre"));
-                p.setDni(request.getParameter("dni"));
-                p.setTelefono(request.getParameter("telefono"));
-                p.setEmail(request.getParameter("email"));
-                p.setDireccion(request.getParameter("direccion"));
-
-                u.setPassword(request.getParameter("password"));
-
-                int resultado = pDao.insert(p, u);
-
-                if (resultado > 0) {
-
-                    jsonResponse.addProperty("success", true);
-                    jsonResponse.addProperty("message",
-                            "Registro realizado correctamente");
-
-                } else {
-
-                    jsonResponse.addProperty("success", false);
-                    jsonResponse.addProperty("message",
-                            "No se pudo registrar el usuario");
-                }
-
-                out.print(jsonResponse.toString());
-
-            } else if ("logout".equals(action)) {
-
-                HttpSession session = request.getSession(false);
-
-                if (session != null) {
-                    session.invalidate();
-                }
-
-                jsonResponse.addProperty("success", true);
-                jsonResponse.addProperty("message", "Sesión cerrada");
-
-                out.print(jsonResponse.toString());
-
-            } else {
+            if (action == null || action.trim().isEmpty()) {
 
                 jsonResponse.addProperty("success", false);
                 jsonResponse.addProperty("message", "Acción no válida");
 
                 out.print(jsonResponse.toString());
+
+                return;
+
+            }
+
+            // ==========================
+            // LOGIN
+            // ==========================
+
+            if ("login".equals(action)) {
+
+                String correo = request.getParameter("correo");
+                String password = request.getParameter("password");
+
+                // Validación de campos
+
+                if (correo == null || correo.trim().isEmpty()
+                        || password == null || password.trim().isEmpty()) {
+
+                    jsonResponse.addProperty("success", false);
+                    jsonResponse.addProperty("message", "Correo y contraseña son obligatorios");
+
+                    out.print(jsonResponse.toString());
+
+                    return;
+
+                }
+
+                Usuario usuario = uDao.iniciarSesion(correo.trim(), password);
+
+                if (usuario != null) {
+
+                    HttpSession sesion = request.getSession(true);
+
+                    sesion.setAttribute("usuario", usuario);
+
+                    JsonObject userData = new JsonObject();
+
+                    userData.addProperty("idUsuario", usuario.getIdUsuario());
+                    userData.addProperty("nombreCompleto", usuario.getNombreCompleto());
+                    userData.addProperty("correo", usuario.getCorreo());
+
+                    jsonResponse.addProperty("success", true);
+                    jsonResponse.addProperty("message", "Inicio de sesión exitoso");
+
+                    jsonResponse.add("userData", userData);
+
+                } else {
+
+                    jsonResponse.addProperty("success", false);
+                    jsonResponse.addProperty("message", "Correo o contraseña incorrectos");
+
+                }
+
+                out.print(jsonResponse.toString());
+
+            }
+                        // ==========================
+            // REGISTER
+            // ==========================
+
+            else if ("register".equals(action)) {
+
+                String nombreCompleto = request.getParameter("nombreCompleto");
+                String correo = request.getParameter("correo");
+                String password = request.getParameter("password");
+
+                // Validaciones
+
+                if (nombreCompleto == null || nombreCompleto.trim().isEmpty()
+                        || correo == null || correo.trim().isEmpty()
+                        || password == null || password.trim().isEmpty()) {
+
+                    jsonResponse.addProperty("success", false);
+                    jsonResponse.addProperty("message", "Todos los campos son obligatorios");
+
+                    out.print(jsonResponse.toString());
+
+                    return;
+
+                }
+
+                // Validar correo
+
+                if (!correo.matches("^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,}$")) {
+
+                    jsonResponse.addProperty("success", false);
+                    jsonResponse.addProperty("message", "Correo electrónico inválido");
+
+                    out.print(jsonResponse.toString());
+
+                    return;
+
+                }
+
+                // Validar contraseña
+
+                if (password.length() < 6) {
+
+                    jsonResponse.addProperty("success", false);
+                    jsonResponse.addProperty("message", "La contraseña debe tener al menos 6 caracteres");
+
+                    out.print(jsonResponse.toString());
+
+                    return;
+
+                }
+
+                Usuario usuario = new Usuario();
+
+                usuario.setNombreCompleto(nombreCompleto.trim());
+                usuario.setCorreo(correo.trim());
+                usuario.setPassword(password);
+
+                // Todo usuario registrado desde la web será CLIENTE
+
+                usuario.setRol(Rol.CLIENTE);
+
+                boolean registrado = uDao.registrar(usuario);
+
+                if (registrado) {
+
+                    jsonResponse.addProperty("success", true);
+                    jsonResponse.addProperty("message", "Usuario registrado correctamente");
+
+                } else {
+
+                    jsonResponse.addProperty("success", false);
+                    jsonResponse.addProperty("message", "No fue posible registrar el usuario");
+
+                }
+
+                out.print(jsonResponse.toString());
+
+            }
+
+            // ==========================
+            // LOGOUT
+            // ==========================
+
+            else if ("logout".equals(action)) {
+
+                HttpSession session = request.getSession(false);
+
+                if (session != null) {
+
+                    session.invalidate();
+
+                }
+
+                jsonResponse.addProperty("success", true);
+                jsonResponse.addProperty("message", "Sesión cerrada correctamente");
+
+                out.print(jsonResponse.toString());
+
+            }
+
+            // ==========================
+            // ACCIÓN NO VÁLIDA
+            // ==========================
+
+            else {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Acción no reconocida");
+
+                out.print(jsonResponse.toString());
+
             }
 
         } catch (Exception e) {
@@ -146,16 +244,19 @@ public class AuthController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
             jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", e.getMessage());
+            jsonResponse.addProperty("message", "Error: " + e.getMessage());
 
             response.getWriter().print(jsonResponse.toString());
 
-            e.printStackTrace();
         }
+
     }
 
     @Override
     public String getServletInfo() {
-        return "Controlador de autenticación";
+
+        return "AuthController BurgerBuilder";
+
     }
+
 }

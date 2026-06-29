@@ -4,6 +4,7 @@
  */
 package Interface;
 
+import Enums.EstadoPedido;
 import Model.Pedido;
 import java.util.List;
 
@@ -13,12 +14,14 @@ import java.util.List;
  */
 public interface IPedido {
 
-    public int generarPedido(Pedido pedido);
+    int generarPedido(Pedido pedido);
 
-    public List<Pedido> lista();
+    List<Pedido> listar();
 
-    public Pedido SearchById(int id);
+    Pedido buscarPorId(int idPedido);
 
-    public boolean updateEstado(Pedido p);
+    boolean actualizarEstado(int idPedido, EstadoPedido estado);
+
+    List<Pedido> historialCliente(int idUsuario);
 
 }
