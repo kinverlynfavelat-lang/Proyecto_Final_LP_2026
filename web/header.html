@@ -1,115 +1,313 @@
-<nav class="navbar navbar-expand-lg shadow-sm" style="background:#e9d3a3;">    
+<nav class="navbar navbar-expand-lg shadow-sm fixed-top navbar-custom">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="index.html"><i class="bi bi-shop me-2"></i>SITE-PRO</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link active" href="index.html">Inicio</a></li>
-            </ul>
 
-            <div class="d-flex align-items-center">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center fw-bold" href="index.html">
+
+            <!-- Cambia esta imagen por tu logo -->
+            <img src="assets/img/logo.png.png"
+                 alt="BurgerBuilder"
+                 width="120"
+                 class="me-2">
+
+
+        </a>
+
+        <!-- Responsive -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarBurger">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarBurger">
+
+            <ul class="navbar-nav me-auto"></ul>
+
+            <div class="d-flex align-items-center flex-wrap">
+                <!-- Delivery 
+                <div class="me-4 text-center">
+
+                    <small class="text-muted d-block">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        Delivery
+                    </small>
+
+                </div>-->
+
+                <!-- Total -->
+                <div class="me-4 text-center">
+
+
+                    <strong>
+                        Total: <span id="total-carrito">S/ 0.00</span>
+                    </strong>
+
+                </div>
+
                 <!-- Carrito -->
-                <a href="carrito.html" class="btn btn-outline-light me-3 position-relative">
-                    <i class="bi bi-cart3"></i>
-                    <span id="cart-count" class="badge rounded-pill bg-danger">0</span>
+                <a href="carrito.html"
+                   class="btn btn-outline-dark position-relative me-3">
+
+                    <i class="bi bi-cart3 fs-5"></i>
+
+                    <span id="cart-count"
+                          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                        0
+
+                    </span>
+
                 </a>
 
-                <!-- Botón Login (Se oculta al entrar) -->
-                <button type="button" id="btn-login-modal" class="btn btn-light text-info fw-bold" data-bs-toggle="modal" data-bs-target="#modalLogin">
-                    <i class="bi bi-person-circle me-1"></i> Login
+                <!-- Botón Login -->
+                <button
+                    id="btn-login-modal"
+                    class="btn btn-dark px-4"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalLogin">
+
+                    Entrar
+
                 </button>
 
-                <!-- Perfil Usuario (Se muestra al entrar) -->
-                <!-- Dentro de header.html -->
-                <div id="user-profile" class="dropdown d-none">
-                    <button class="btn btn-light dropdown-toggle text-info fw-bold" type="button" data-bs-toggle="dropdown">
-                        <span id="user-name">Usuario</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                        <!-- OPCIÓN ADMIN -->
-                        <li>
-                            <a class="dropdown-item d-none text-primary fw-bold" href="admin_productos.html" id="link-admin">
-                                <i class="bi bi-kanban me-2"></i>Administrar Productos
-                            </a>
-                        </li>
-                        <li id="separator-admin" class="d-none"><hr class="dropdown-divider"></li>
+                <!-- Usuario -->
+                <div id="user-profile"
+                     class="dropdown d-none">
 
-                        <!-- OPCIONES COMUNES -->
-                        <li><a class="dropdown-item" href="mis_compras.html"><i class="bi bi-bag-check me-2"></i>Mis Compras</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Mi Perfil</a></li>
-                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()">
-                                <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a>
+                    <button
+                        class="btn btn-dark dropdown-toggle"
+                        data-bs-toggle="dropdown">
+
+                        <span id="user-name">
+                            Usuario
+                        </span>
+
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                        <!-- ADMIN -->
+
+                        <li>
+
+                            <a
+                                id="link-admin-productos"
+                                class="dropdown-item d-none admin-only"
+                                href="admin_productos.html">
+
+                                <i class="bi bi-box-seam me-2"></i>
+
+                                Administrar Productos
+
+                            </a>
+
                         </li>
+
+                        <li>
+
+                            <a
+                                id="link-admin-pedidos"
+                                class="dropdown-item d-none admin-only"
+                                href="admin_pedidos.html">
+
+                                <i class="bi bi-receipt me-2"></i>
+
+                                Administrar Pedidos
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a
+                                id="link-admin-pagos"
+                                class="dropdown-item d-none admin-only"
+                                href="admin_pagos.html">
+
+                                <i class="bi bi-credit-card me-2"></i>
+
+                                Administrar Pagos
+
+                            </a>
+
+                        </li>
+
+                        <li id="separator-admin"
+                            class="d-none admin-only">
+
+                            <hr class="dropdown-divider">
+
+                        </li>
+
+                        <!-- CLIENTE -->
+
+                        <li>
+
+                            <a
+                                id="link-mis-pedidos"
+                                class="dropdown-item"
+                                href="mis_pedidos.html">
+
+                                <i class="bi bi-bag-check me-2"></i>
+
+                                Mis pedidos
+
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a
+                                class="dropdown-item text-danger"
+                                href="#"
+                                onclick="logout()">
+
+                                <i class="bi bi-box-arrow-right me-2"></i>
+
+                                Cerrar sesión
+
+                            </a>
+
+                        </li>
+
                     </ul>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
 </nav>
 
-<!-- MODAL LOGIN -->
-<div class="modal fade" id="modalLogin" tabindex="-1" aria-hidden="true">
+<!-- ===================== LOGIN ====================== -->
+
+<div class="modal fade" id="modalLogin" tabindex="-1">
+
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title">Iniciar Sesión</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+        <div class="modal-content p-4 position-relative">
+
+            <!-- BOTÓN CERRAR -->
+            <button class="btn-close position-absolute top-0 end-0 m-3"
+                    data-bs-dismiss="modal"></button>
+
+            <!-- LOGO -->
+            <div class="text-center mb-2">
+
+                <div class="d-flex justify-content-center mb-1">
+                    <img src="assets/img/logo.png.png"
+                         width="110"
+                         alt="Logo">
+                </div>
+
+                <h5 class="mb-0">Inicia sesión</h5>
+
+                <h6 class="text-muted mt-1 mb-0">
+                    Para continuar con tu pedido
+                </h6>
+
             </div>
-            <div class="modal-body">
-                <form id="form-login">
-                    <div class="mb-3">
-                        <label class="form-label">Correo Electrónico</label>
-                        <input type="email" name="usuario" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Contraseña</label>
-                        <input type="password" name="password" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-info text-white w-100">Entrar</button>
-                </form>
-                <p class="text-center mt-3 small">¿No tienes cuenta? <a href="#" data-bs-toggle="modal" data-bs-target="#modalRegister">Regístrate aquí</a></p>
-            </div>
+
+            <!-- FORM -->
+            <form id="form-login">
+
+                <div class="mb-3">
+                    <label>Correo</label>
+                    <input type="email" name="correo" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+
+                <button class="btn btn-dark w-100" type="submit">
+                    Entrar
+                </button>
+
+            </form>
+
+            <p class="text-center mt-3 mb-0">
+
+                ¿No tienes cuenta?
+
+                <a href="#" data-bs-toggle="modal" data-bs-target="#modalRegister">
+                    Regístrate
+                </a>
+
+            </p>
+
         </div>
+
     </div>
+
 </div>
 
-<!<!-- modal registro -->
-<div class="modal fade" id="modalRegister" tabindex="-1" aria-hidden="true">
+
+<!-- ===================== REGISTRO ====================== -->
+
+<div class="modal fade" id="modalRegister" tabindex="-1">
+
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title">Crear Cuenta</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+        <div class="modal-content p-4 position-relative">
+
+            <!-- BOTÓN CERRAR -->
+            <button class="btn-close position-absolute top-0 end-0 m-3"
+                    data-bs-dismiss="modal"></button>
+
+            <div class="text-center mb-2">
+
+                <div class="d-flex justify-content-center mb-1">
+                    <img src="assets/img/logo.png.png"
+                         width="110"
+                         alt="Logo">
+                </div>
+
+                <h5 class="mb-0">Crear Cuenta</h5>
+
+                <p class="text-muted mt-1 mb-0">
+                    Regístrate para continuar
+                </p>
+
             </div>
-            <div class="modal-body">
-                <form id="form-register">
-                    <div class="mb-3">
-                        <label class="form-label">Nombre Completo</label>
-                        <input type="text" name="nombre" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Correo</label>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Telefono</label>
-                            <input type="text" name="telefono" class="form-control" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Contraseña</label>
-                            <input type="password" name="password" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Direccion</label>
-                        <textarea name="direccion" class="form-control" rows="2"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-info text-white w-100">Registrarme</button>
-                </form>
-            </div>
+
+            <!-- FORMULARIO -->
+            <form id="form-register">
+
+                <div class="mb-3">
+                    <label>Nombre completo</label>
+                    <input type="text" name="nombreCompleto" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Correo</label>
+                    <input type="email" name="correo" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label>Contraseña</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+
+                <button class="btn btn-dark w-100" type="submit">
+                    Registrarme
+                </button>
+
+            </form>
+
         </div>
+
     </div>
+
 </div>

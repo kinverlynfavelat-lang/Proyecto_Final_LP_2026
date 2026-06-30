@@ -1,17 +1,17 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
- */
 
-
-// Función para cargar archivos HTML
+// ==========================
+// CARGAR COMPONENTES HTML
+// ==========================
 async function loadComponent(id, file) {
     const response = await fetch(file);
     const data = await response.text();
     document.getElementById(id).innerHTML = data;
 }
 
-// Función para cargar scripts secuencialmente
+
+// ==========================
+// CARGAR SCRIPTS EN ORDEN
+// ==========================
 function loadScript(src) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -22,45 +22,66 @@ function loadScript(src) {
     });
 }
 
+
+// ==========================
+// INIT PRINCIPAL
+// ==========================
 async function init() {
+
     try {
-        // 1. Cargar los componentes HTML
+
+        // 1. COMPONENTES HTML
         await loadComponent('head-placeholder', 'head.html');
         await loadComponent('header-placeholder', 'header.html');
         await loadComponent('footer-placeholder', 'footer.html');
 
-        // 2. Cargar las librerías en ORDEN ESTRICTO
-        await loadScript('assets/js/jquery-3.6.0.min.js');
 
-        // --- AÑADIR ESTOS DOS ---
+        // 2. LIBRERÍAS
+        await loadScript('assets/js/jquery-3.6.0.min.js');
         await loadScript('assets/js/jquery.dataTables.min.js');
         await loadScript('assets/js/dataTables.bootstrap5.min.js');
-        // ------------------------
-
         await loadScript('assets/js/bootstrap.bundle.min.js');
         await loadScript('https://cdn.jsdelivr.net/npm/sweetalert2@11');
 
-        // 3. Cargar nuestra lógica al final
-        await loadScript('assets/js/tienda.js');
 
-        // 4. Ejecutar funciones iniciales
+        // 3. LÓGICA PRINCIPAL DE TIENDA
+        await loadScript("assets/js/auth.js");
+await loadScript("assets/js/tienda.js");
+        
+
+
+        // 4. INICIALIZACIÓN SEGURA
         setTimeout(() => {
-            if (typeof verificarSesion === 'function')
-                verificarSesion();
-            if (typeof cargarProductos === 'function')
-                cargarProductos();
-            if (typeof inicializarEventosAuth === 'function')
-                inicializarEventosAuth();
-            if (typeof cargarTablaAdmin === 'function')
-                cargarTablaAdmin();
 
-            if (typeof cargarCarrito === 'function')
-                cargarCarrito();
-            if (typeof actualizarContadorCarrito === 'function')
-                actualizarContadorCarrito();
-            
-            if (typeof cargarHistorial === 'function')
+            // 🔐 SESIÓN
+            if (typeof verificarSesion === 'function') {
+                verificarSesion();
+            }
+
+            // 🛍️ PRODUCTOS
+            if (typeof cargarProductos === 'function') {
+                cargarProductos();
+            }
+
+            // 🎯 EVENTOS AUTH
+            if (typeof inicializarEventosAuth === 'function') {
+                inicializarEventosAuth();
+            }
+
+            // 📊 ADMIN TABLAS
+            if (typeof cargarTablaAdmin === 'function') {
+                cargarTablaAdmin();
+            }
+
+            // 🛒 CARRITO (SISTEMA ÚNICO)
+            if (typeof refrescarCarrito === 'function') {
+                refrescarCarrito();
+            }
+
+            // 📜 HISTORIAL
+            if (typeof cargarHistorial === 'function') {
                 cargarHistorial();
+            }
 
         }, 200);
 
@@ -69,4 +90,8 @@ async function init() {
     }
 }
 
+
+// ==========================
+// INICIAR APP
+// ==========================
 init();

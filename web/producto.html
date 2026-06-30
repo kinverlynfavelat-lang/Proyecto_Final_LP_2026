@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Personalizar hamburguesa</title>
+
+    <div id="head-placeholder"></div>
+
+</head>
+
+<body>
+
+<header id="header-placeholder"></header>
+
+<main class="container py-5">
+
+    <!-- Botón volver -->
+
+    <div class="mb-4">
+
+        <a href="index.html"
+           class="text-decoration-none text-dark">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Volver al menú
+
+        </a>
+
+    </div>
+
+
+    <div class="row">
+
+        <!-- Imagen -->
+
+        <div class="col-lg-5">
+
+            <img
+                id="producto-imagen"
+                class="img-fluid rounded shadow">
+
+        </div>
+
+
+        <!-- Información -->
+
+        <div class="col-lg-7">
+
+            <h2
+                id="producto-nombre"
+                class="fw-bold">
+
+            </h2>
+
+            <p
+                id="producto-descripcion"
+                class="text-muted">
+
+            </p>
+
+            <h3
+                id="producto-precio"
+                class="fw-bold text-danger">
+
+            </h3>
+
+            <hr>
+
+            <h5 class="fw-bold">
+
+                Personaliza tu hamburguesa
+
+            </h5>
+
+            <div id="lista-ingredientes">
+
+                <div class="text-center py-3">
+
+                    Cargando ingredientes...
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="d-flex align-items-center mb-4">
+
+                <button
+                    class="btn btn-outline-dark"
+                    onclick="disminuirCantidad()">
+
+                    -
+
+                </button>
+
+                <span
+                    id="cantidad"
+                    class="mx-4 fs-4">
+
+                    1
+
+                </span>
+
+                <button
+                    class="btn btn-outline-dark"
+                    onclick="aumentarCantidad()">
+
+                    +
+
+                </button>
+
+            </div>
+
+            <h3>
+
+                Total:
+
+                <span id="precio-total">
+
+                    S/ 0.00
+
+                </span>
+
+            </h3>
+
+            <button
+                class="btn btn-danger btn-lg mt-3"
+                onclick="agregarProductoPersonalizado()">
+
+                Añadir al carrito
+
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+<footer id="footer-placeholder"></footer>
+
+<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

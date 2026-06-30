@@ -33,91 +33,75 @@ public class AppController extends HttpServlet {
     private final Gson gson = new Gson();
 
     protected void processRequest(HttpServletRequest request,
-            HttpServletResponse response)
-            throws ServletException, IOException {
+        HttpServletResponse response)
+        throws ServletException, IOException {
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
 
-        String action = request.getParameter("action");
+    String action = request.getParameter("action");
 
+    HttpSession session = request.getSession();
+
+    List<Carrito> carrito = (List<Carrito>) session.getAttribute("carrito");
+
+    if (carrito == null) {
+        carrito = new ArrayList<>();
+        session.setAttribute("carrito", carrito);
+    }
+
+    if (action == null || action.trim().isEmpty()) {
         JsonObject jsonResponse = new JsonObject();
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("message", "Acción no válida");
+        response.getWriter().print(jsonResponse.toString());
+        return;
+    }
 
-        HttpSession session = request.getSession();
+    switch (action) {
+        case "listarProductos":
+            listarProductos(request, response);
+            break;
 
-        List<Carrito> carrito
-                = (List<Carrito>) session.getAttribute("carrito");
+        case "agregarCarrito":
+            agregarCarrito(request, response, carrito);
+            break;
 
-        if (carrito == null) {
+        case "listarCarrito":
+            listarCarrito(request, response, carrito);
+            break;
 
-            carrito = new ArrayList<>();
+        case "actualizarCantidad":
+            actualizarCantidad(request, response, carrito);
+            break;
 
-            session.setAttribute("carrito", carrito);
+        case "quitarProducto":
+            quitarProducto(request, response, carrito);
+            break;
 
-        }
+        case "limpiarCarrito":
+            limpiarCarrito(request, response, carrito);
+            break;
 
-        try (PrintWriter out = response.getWriter()) {
+        case "generarPedido":
+            generarPedido(request, response, carrito, session);
+            break;
 
-            if (action == null || action.trim().isEmpty()) {
+        case "historialPedidos":
+            historialPedidos(request, response, session);
+            break;
 
-                jsonResponse.addProperty("success", false);
-                jsonResponse.addProperty("message", "Acción no válida");
+        case "detallePedido":
+            detallePedido(request, response);
+            break;
 
-                out.print(jsonResponse.toString());
+        default:
+            JsonObject jsonResponse = new JsonObject();
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Acción no encontrada");
+            response.getWriter().print(jsonResponse.toString());
+    }
 
-                return;
-
-            }
-
-            switch (action) {
-
-                case "listarProductos":
-                    listarProductos(request, response);
-                    break;
-
-                case "agregarCarrito":
-                    agregarCarrito(request, response, carrito);
-                    break;
-
-                case "listarCarrito":
-                    listarCarrito(request, response, carrito);
-                    break;
-
-                case "actualizarCantidad":
-                    actualizarCantidad(request, response, carrito);
-                    break;
-
-                case "quitarProducto":
-                    quitarProducto(request, response, carrito);
-                    break;
-
-                case "limpiarCarrito":
-                    limpiarCarrito(request, response, carrito);
-                    break;
-
-                case "generarPedido":
-
-                    generarPedido(request, response, carrito, session);
-
-                    break;
-                case "historialPedidos":
-
-                    historialPedidos(request, response, session);
-
-                    break;
-                case "detallePedido":
-
-                    detallePedido(request, response);
-
-                    break;
-
-                default:
-                    jsonResponse.addProperty("success", false);
-                    jsonResponse.addProperty("message", "Acción no encontrada");
-                    out.print(jsonResponse.toString());
-                    break;
-            }
-        }
 
     }
 
@@ -148,83 +132,67 @@ public class AppController extends HttpServlet {
     }
 
     private void agregarCarrito(HttpServletRequest request,
-            HttpServletResponse response,
-            List<Carrito> carrito) throws IOException {
+        HttpServletResponse response,
+        List<Carrito> carrito) throws IOException {
 
-        JsonObject jsonResponse = new JsonObject();
+    JsonObject jsonResponse = new JsonObject();
 
-        try {
+    HttpSession session = request.getSession(false);
+    Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
 
-            int idProducto
-                    = Integer.parseInt(request.getParameter("idProducto"));
+    // 🔥 VALIDACIÓN DE LOGIN
+    if (usuario == null) {
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("message", "NO_SESSION");
+        response.getWriter().print(jsonResponse.toString());
+        return;
+    }
 
-            Producto producto
-                    = pDao.buscarPorId(idProducto);
+    try {
 
-            if (producto == null) {
+        int idProducto = Integer.parseInt(request.getParameter("idProducto"));
 
-                jsonResponse.addProperty("success", false);
-                jsonResponse.addProperty("message",
-                        "Producto no encontrado");
+        Producto producto = pDao.buscarPorId(idProducto);
 
-                response.getWriter().print(jsonResponse.toString());
-
-                return;
-
-            }
-
-            boolean existe = false;
-
-            for (Carrito item : carrito) {
-
-                if (item.getProducto().getIdProducto()
-                        == idProducto) {
-
-                    item.setCantidad(item.getCantidad() + 1);
-
-                    item.setSubTotal(
-                            item.getCantidad()
-                            * item.getPrecioCompra());
-
-                    existe = true;
-
-                    break;
-
-                }
-
-            }
-
-            if (!existe) {
-
-                Carrito item = new Carrito();
-
-                item.setProducto(producto);
-                item.setCantidad(1);
-                item.setPrecioCompra(producto.getPrecio());
-                item.setSubTotal(producto.getPrecio());
-
-                carrito.add(item);
-
-            }
-
-            jsonResponse.addProperty("success", true);
-            jsonResponse.addProperty("message",
-                    "Producto agregado al carrito");
-
-            jsonResponse.addProperty("cantidadCarrito",
-                    carrito.size());
-
-        } catch (Exception e) {
-
+        if (producto == null) {
             jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message",
-                    "Error: " + e.getMessage());
-
+            jsonResponse.addProperty("message", "Producto no encontrado");
+            response.getWriter().print(jsonResponse.toString());
+            return;
         }
 
-        response.getWriter().print(jsonResponse.toString());
+        boolean existe = false;
 
+        for (Carrito item : carrito) {
+
+            if (item.getProducto().getIdProducto() == idProducto) {
+
+                item.setCantidad(item.getCantidad() + 1);
+                item.setSubTotal(item.getCantidad() * item.getPrecioCompra());
+                existe = true;
+                break;
+            }
+        }
+
+        if (!existe) {
+            Carrito item = new Carrito();
+            item.setProducto(producto);
+            item.setCantidad(1);
+            item.setPrecioCompra(producto.getPrecio());
+            item.setSubTotal(producto.getPrecio());
+            carrito.add(item);
+        }
+
+        jsonResponse.addProperty("success", true);
+        jsonResponse.addProperty("message", "Producto agregado al carrito");
+
+    } catch (Exception e) {
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("message", e.getMessage());
     }
+
+    response.getWriter().print(jsonResponse.toString());
+}
 
     private void listarCarrito(HttpServletRequest request,
             HttpServletResponse response,

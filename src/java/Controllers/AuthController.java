@@ -110,6 +110,7 @@ public class AuthController extends HttpServlet {
                     userData.addProperty("idUsuario", usuario.getIdUsuario());
                     userData.addProperty("nombreCompleto", usuario.getNombreCompleto());
                     userData.addProperty("correo", usuario.getCorreo());
+                    userData.addProperty("rol", usuario.getRol().toString());
 
                     jsonResponse.addProperty("success", true);
                     jsonResponse.addProperty("message", "Inicio de sesión exitoso");
@@ -211,45 +212,48 @@ public class AuthController extends HttpServlet {
 
             else if ("logout".equals(action)) {
 
-                HttpSession session = request.getSession(false);
+    HttpSession session = request.getSession(false);
 
-                if (session != null) {
+    if (session != null) {
+        session.invalidate();
+    }
 
-                    session.invalidate();
+    jsonResponse.addProperty("success", true);
+    jsonResponse.addProperty("message", "Sesión cerrada correctamente");
 
-                }
+    out.print(jsonResponse.toString());
 
-                jsonResponse.addProperty("success", true);
-                jsonResponse.addProperty("message", "Sesión cerrada correctamente");
+}
+else if ("check".equals(action)) {
 
-                out.print(jsonResponse.toString());
+    HttpSession session = request.getSession(false);
+    Usuario usuario = (session != null)
+            ? (Usuario) session.getAttribute("usuario")
+            : null;
 
-            }
+    if (usuario != null) {
 
-            // ==========================
-            // ACCIÓN NO VÁLIDA
-            // ==========================
+        JsonObject userData = new JsonObject();
+        userData.addProperty("nombreCompleto", usuario.getNombreCompleto());
+        userData.addProperty("rol", usuario.getRol().toString());
 
-            else {
+        jsonResponse.addProperty("success", true);
+        jsonResponse.add("userData", userData);
 
-                jsonResponse.addProperty("success", false);
-                jsonResponse.addProperty("message", "Acción no reconocida");
+    } else {
+        jsonResponse.addProperty("success", false);
+    }
 
-                out.print(jsonResponse.toString());
+    out.print(jsonResponse.toString());
+}
+else {   // 🔴 ESTE ES EL ÚLTIMO SIEMPRE
 
-            }
+    jsonResponse.addProperty("success", false);
+    jsonResponse.addProperty("message", "Acción no reconocida");
 
-        } catch (Exception e) {
-
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-
-            jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "Error: " + e.getMessage());
-
-            response.getWriter().print(jsonResponse.toString());
-
+    out.print(jsonResponse.toString());
+}
         }
-
     }
 
     @Override

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito - BurgerBuilder</title>
+    <div id="head-placeholder"></div>
+</head>
+
+<body>
+
+<header id="header-placeholder"></header>
+
+<main class="container py-5">
+
+    <h2 class="fw-bold mb-4">Tu Carrito</h2>
+
+    <div class="table-responsive">
+        <table class="table align-middle" id="tabla-carrito">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="row justify-content-end mt-4">
+        <div class="col-md-4">
+
+            <div class="card shadow-sm p-3">
+
+                <h5 class="fw-bold">Resumen</h5>
+                <hr>
+
+                <div class="d-flex justify-content-between">
+                    <span>Total:</span>
+                    <span class="fw-bold" id="total-carrito">S/ 0.00</span>
+                </div>
+
+                <button class="btn btn-success w-100 mt-3" onclick="iniciarCompra()">
+                    Finalizar compra
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer id="footer-placeholder"></footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/carrito.js"></script>
+
+</body>
+<div class="modal fade" id="modalDatosPedido">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+
+      <h5>Datos del pedido</h5>
+
+      <input id="nombreCliente" class="form-control mb-2" placeholder="Nombre">
+      <input id="dni" class="form-control mb-2" placeholder="DNI">
+      <input id="telefono" class="form-control mb-2" placeholder="Teléfono">
+      <input id="direccion" class="form-control mb-2" placeholder="Dirección">
+
+      <button class="btn btn-primary w-100" onclick="pasarMetodoPago()">
+        Continuar
+      </button>
+
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalMetodoPago">
+  <div class="modal-dialog">
+    <div class="modal-content p-3 text-center">
+
+      <h5>Selecciona método de pago</h5>
+
+      <button class="btn btn-warning w-100 mb-2"
+        onclick="confirmarMetodoPago('YAPE')">
+        Yape
+      </button>
+
+      <button class="btn btn-primary w-100"
+        onclick="confirmarMetodoPago('PLIN')">
+        Plin
+      </button>
+
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalResumenPedido">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+
+      <h5>Resumen del pedido</h5>
+
+      <p>Código: <span id="res-codigo"></span></p>
+      <p>Método: <span id="res-metodo"></span></p>
+      <p>Total: <span id="res-total"></span></p>
+
+      <hr>
+
+      <p class="text-center">💚 Yape: 935715194</p>
+
+      <button class="btn btn-success w-100"
+        onclick="abrirModalComprobante()">
+        Subir comprobante
+      </button>
+
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalComprobante">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+
+      <h5>Subir comprobante</h5>
+
+      <form id="form-comprobante">
+
+        <input type="file" name="comprobante" class="form-control mb-3" required>
+
+        <button type="button" class="btn btn-primary w-100"
+          onclick="enviarComprobante()">
+          Enviar comprobante
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalFinal">
+  <div class="modal-dialog">
+    <div class="modal-content text-center p-4">
+
+      <h3>🎉 Pedido confirmado</h3>
+
+      <p><b>Código:</b> <span id="final-codigo"></span></p>
+      <p><b>Método:</b> <span id="final-metodo"></span></p>
+      <p><b>Total:</b> <span id="final-total"></span></p>
+
+      <p class="text-muted mt-3">
+        Recibirás confirmación cuando tu pago sea aprobado
+      </p>
+
+      <button class="btn btn-success w-100"
+        onclick="volverAlMenu()">
+        Volver al menú
+      </button>
+
+    </div>
+  </div>
+</div>
+</html>

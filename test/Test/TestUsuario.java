@@ -25,10 +25,10 @@ public class TestUsuario {
 
         Usuario usuario = new Usuario();
 
-        usuario.setNombreCompleto("Kinverlyn Flores");
-        usuario.setCorreo("kinverlyn@gmail.com");
+        usuario.setNombreCompleto("Mishel Goñas");
+        usuario.setCorreo("mishel20@gmail.com");
         usuario.setPassword("admin123");
-        usuario.setRol(Rol.CLIENTE);
+        usuario.setRol(Rol.ADMIN);
 
         boolean registrado = dao.registrar(usuario);
 
@@ -52,7 +52,7 @@ public class TestUsuario {
     public void iniciarSesion() {
 
         Usuario usuario = dao.iniciarSesion(
-                "kinverlyn@gmail.com",
+                "mishel20@gmail.com",
                 "admin123"
         );
 
