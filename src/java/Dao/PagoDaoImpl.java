@@ -11,6 +11,8 @@ import Model.Pedido;
 import Util.ConexionSingleton;
 import java.sql.*;
 import Interface.IPago;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -202,6 +204,44 @@ public class PagoDaoImpl implements IPago {
     }
 
     return flag;
+    }
+
+    @Override
+    public List<Pago> listarTodos() {
+        
+         List<Pago> lista = new ArrayList<>();
+
+    String sql = "SELECT * FROM PAGO";
+
+    try {
+
+        cn = ConexionSingleton.getConnection();
+        PreparedStatement st = cn.prepareStatement(sql);
+        ResultSet rs = st.executeQuery();
+
+        while (rs.next()) {
+
+            Pago p = new Pago();
+
+            p.setIdPago(rs.getInt("idPago"));
+            p.setMetodo(MetodoPago.valueOf(rs.getString("metodo")));
+            p.setComprobante(rs.getString("comprobante"));
+            p.setEstadoPago(EstadoPago.valueOf(rs.getString("estadoPago")));
+            p.setFechaPago(rs.getTimestamp("fechaPago").toLocalDateTime());
+
+            Pedido pe = new Pedido();
+            pe.setIdPedido(rs.getInt("idPedido"));
+
+            p.setPedido(pe);
+
+            lista.add(p);
+        }
+
+    } catch (Exception e) {
+        System.out.println("Error listar pagos: " + e.getMessage());
+    }
+
+    return lista;
     }
 
     

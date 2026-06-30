@@ -1,15 +1,92 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Administrar Pedidos</title>
+
+    <div id="head-placeholder"></div>
+
+</head>
+
+<body>
+
+    <header id="header-placeholder"></header>
+
+    <main class="container py-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h2 class="fw-bold">
+                Administrar Pedidos
+            </h2>
+
+        </div>
+
+        <!-- TABLA -->
+        <div class="card shadow">
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle" id="tabla-pedidos">
+
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Código</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Método</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <!-- JS RELLENA AQUÍ -->
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- MODAL DETALLE -->
+    <div class="modal fade" id="modalPedido" tabindex="-1">
+
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+
+                <div class="modal-header bg-dark text-white">
+
+                    <h5 class="modal-title">Detalle del Pedido</h5>
+
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <div class="modal-body" id="contenidoPedido"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer id="footer-placeholder"></footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/admin_pedidos.js"></script>
+
+</body>
+
 </html>

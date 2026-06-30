@@ -33,75 +33,85 @@ public class AppController extends HttpServlet {
     private final Gson gson = new Gson();
 
     protected void processRequest(HttpServletRequest request,
-        HttpServletResponse response)
-        throws ServletException, IOException {
+            HttpServletResponse response)
+            throws ServletException, IOException {
 
-    response.setContentType("application/json");
-    response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-    String action = request.getParameter("action");
+        String action = request.getParameter("action");
 
-    HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
 
-    List<Carrito> carrito = (List<Carrito>) session.getAttribute("carrito");
+        List<Carrito> carrito = (List<Carrito>) session.getAttribute("carrito");
 
-    if (carrito == null) {
-        carrito = new ArrayList<>();
-        session.setAttribute("carrito", carrito);
-    }
+        if (carrito == null) {
+            carrito = new ArrayList<>();
+            session.setAttribute("carrito", carrito);
+        }
 
-    if (action == null || action.trim().isEmpty()) {
-        JsonObject jsonResponse = new JsonObject();
-        jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message", "Acción no válida");
-        response.getWriter().print(jsonResponse.toString());
-        return;
-    }
-
-    switch (action) {
-        case "listarProductos":
-            listarProductos(request, response);
-            break;
-
-        case "agregarCarrito":
-            agregarCarrito(request, response, carrito);
-            break;
-
-        case "listarCarrito":
-            listarCarrito(request, response, carrito);
-            break;
-
-        case "actualizarCantidad":
-            actualizarCantidad(request, response, carrito);
-            break;
-
-        case "quitarProducto":
-            quitarProducto(request, response, carrito);
-            break;
-
-        case "limpiarCarrito":
-            limpiarCarrito(request, response, carrito);
-            break;
-
-        case "generarPedido":
-            generarPedido(request, response, carrito, session);
-            break;
-
-        case "historialPedidos":
-            historialPedidos(request, response, session);
-            break;
-
-        case "detallePedido":
-            detallePedido(request, response);
-            break;
-
-        default:
+        if (action == null || action.trim().isEmpty()) {
             JsonObject jsonResponse = new JsonObject();
             jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "Acción no encontrada");
+            jsonResponse.addProperty("message", "Acción no válida");
             response.getWriter().print(jsonResponse.toString());
-    }
+            return;
+        }
 
+        switch (action) {
+            case "listarProductos":
+                listarProductos(request, response);
+                break;
+
+            case "agregarCarrito":
+                agregarCarrito(request, response, carrito);
+                break;
+
+            case "listarCarrito":
+                listarCarrito(request, response, carrito);
+                break;
+
+            case "actualizarCantidad":
+                actualizarCantidad(request, response, carrito);
+                break;
+
+            case "quitarProducto":
+                quitarProducto(request, response, carrito);
+                break;
+
+            case "limpiarCarrito":
+                limpiarCarrito(request, response, carrito);
+                break;
+
+            case "generarPedido":
+                generarPedido(request, response, carrito, session);
+                break;
+
+            case "historialPedidos":
+                historialPedidos(request, response, session);
+                break;
+
+            case "detallePedido":
+                detallePedido(request, response);
+                break;
+            case "listarPedidosAdmin":
+                listarPedidosAdmin(request, response);
+                break;
+
+            case "actualizarEstadoPedido":
+                actualizarEstadoPedido(request, response);
+                break;
+
+            case "buscarPedido":
+                buscarPedido(request, response);
+                break;
+
+            default:
+                JsonObject jsonResponse = new JsonObject();
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Acción no encontrada");
+                response.getWriter().print(jsonResponse.toString());
+        }
 
     }
 
@@ -132,67 +142,67 @@ public class AppController extends HttpServlet {
     }
 
     private void agregarCarrito(HttpServletRequest request,
-        HttpServletResponse response,
-        List<Carrito> carrito) throws IOException {
+            HttpServletResponse response,
+            List<Carrito> carrito) throws IOException {
 
-    JsonObject jsonResponse = new JsonObject();
+        JsonObject jsonResponse = new JsonObject();
 
-    HttpSession session = request.getSession(false);
-    Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
+        HttpSession session = request.getSession(false);
+        Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
 
-    // 🔥 VALIDACIÓN DE LOGIN
-    if (usuario == null) {
-        jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message", "NO_SESSION");
-        response.getWriter().print(jsonResponse.toString());
-        return;
-    }
-
-    try {
-
-        int idProducto = Integer.parseInt(request.getParameter("idProducto"));
-
-        Producto producto = pDao.buscarPorId(idProducto);
-
-        if (producto == null) {
+        // 🔥 VALIDACIÓN DE LOGIN
+        if (usuario == null) {
             jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "Producto no encontrado");
+            jsonResponse.addProperty("message", "NO_SESSION");
             response.getWriter().print(jsonResponse.toString());
             return;
         }
 
-        boolean existe = false;
+        try {
 
-        for (Carrito item : carrito) {
+            int idProducto = Integer.parseInt(request.getParameter("idProducto"));
 
-            if (item.getProducto().getIdProducto() == idProducto) {
+            Producto producto = pDao.buscarPorId(idProducto);
 
-                item.setCantidad(item.getCantidad() + 1);
-                item.setSubTotal(item.getCantidad() * item.getPrecioCompra());
-                existe = true;
-                break;
+            if (producto == null) {
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Producto no encontrado");
+                response.getWriter().print(jsonResponse.toString());
+                return;
             }
+
+            boolean existe = false;
+
+            for (Carrito item : carrito) {
+
+                if (item.getProducto().getIdProducto() == idProducto) {
+
+                    item.setCantidad(item.getCantidad() + 1);
+                    item.setSubTotal(item.getCantidad() * item.getPrecioCompra());
+                    existe = true;
+                    break;
+                }
+            }
+
+            if (!existe) {
+                Carrito item = new Carrito();
+                item.setProducto(producto);
+                item.setCantidad(1);
+                item.setPrecioCompra(producto.getPrecio());
+                item.setSubTotal(producto.getPrecio());
+                carrito.add(item);
+            }
+
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("message", "Producto agregado al carrito");
+
+        } catch (Exception e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", e.getMessage());
         }
 
-        if (!existe) {
-            Carrito item = new Carrito();
-            item.setProducto(producto);
-            item.setCantidad(1);
-            item.setPrecioCompra(producto.getPrecio());
-            item.setSubTotal(producto.getPrecio());
-            carrito.add(item);
-        }
-
-        jsonResponse.addProperty("success", true);
-        jsonResponse.addProperty("message", "Producto agregado al carrito");
-
-    } catch (Exception e) {
-        jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message", e.getMessage());
+        response.getWriter().print(jsonResponse.toString());
     }
-
-    response.getWriter().print(jsonResponse.toString());
-}
 
     private void listarCarrito(HttpServletRequest request,
             HttpServletResponse response,
@@ -386,7 +396,7 @@ public class AppController extends HttpServlet {
             );
 
             pedido.setEstadoPedido(
-                    EstadoPedido.LISTO
+                    EstadoPedido.RECIBIDO
             );
 
             pedido.setDetallePedido(carrito);
@@ -502,99 +512,186 @@ public class AppController extends HttpServlet {
     }
 
     private void detallePedido(HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+
+        JsonObject jsonResponse = new JsonObject();
+
+        try {
+
+            int idPedido = Integer.parseInt(
+                    request.getParameter("idPedido"));
+
+            Pedido pedido = peDao.buscarPorId(idPedido);
+
+            if (pedido != null) {
+
+                JsonObject data = new JsonObject();
+
+                //========================
+                // Datos del pedido
+                //========================
+                data.addProperty("idPedido", pedido.getIdPedido());
+                data.addProperty("codigo", pedido.getCodigo());
+                data.addProperty("fecha", pedido.getFecha().toString());
+                data.addProperty("estadoPedido",
+                        pedido.getEstadoPedido().name());
+                data.addProperty("metodoPago",
+                        pedido.getMetodoPago().name());
+                data.addProperty("nombreCliente",
+                        pedido.getNombreCliente());
+                data.addProperty("dni",
+                        pedido.getDni());
+                data.addProperty("telefono",
+                        pedido.getTelefono());
+                data.addProperty("direccionEntrega",
+                        pedido.getDireccionEntrega());
+                data.addProperty("total",
+                        pedido.getTotal());
+
+                //========================
+                // Detalle del pedido
+                //========================
+                JsonArray detalles = new JsonArray();
+
+                for (DetallePedido d : pedido.getDetalles()) {
+
+                    JsonObject det = new JsonObject();
+
+                    det.addProperty("idDetalle",
+                            d.getIdDetalleP());
+
+                    det.addProperty("producto",
+                            d.getProducto().getNombre());
+
+                    det.addProperty("cantidad",
+                            d.getCantidad());
+
+                    det.addProperty("precioUnitario",
+                            d.getPrecioUnitario());
+
+                    det.addProperty("subTotal",
+                            d.getSubTotal());
+
+                    detalles.add(det);
+
+                }
+
+                data.add("detalles", detalles);
+
+                jsonResponse.addProperty("success", true);
+                jsonResponse.add("data", data);
+
+            } else {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message",
+                        "Pedido no encontrado");
+
+            }
+
+        } catch (NumberFormatException e) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message",
+                    "ID de pedido inválido");
+
+        } catch (Exception e) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message",
+                    "Error: " + e.getMessage());
+
+        }
+
+        response.getWriter().print(jsonResponse.toString());
+
+    }
+    private void listarPedidosAdmin(HttpServletRequest request,
         HttpServletResponse response) throws IOException {
 
     JsonObject jsonResponse = new JsonObject();
 
     try {
 
-        int idPedido = Integer.parseInt(
-                request.getParameter("idPedido"));
+        List<Pedido> lista = peDao.listar(); // IMPORTANTE: necesitas este método en DAO
 
-        Pedido pedido = peDao.buscarPorId(idPedido);
+        JsonArray pedidos = new JsonArray();
 
-        if (pedido != null) {
+        for (Pedido p : lista) {
 
-            JsonObject data = new JsonObject();
+            JsonObject obj = new JsonObject();
 
-            //========================
-            // Datos del pedido
-            //========================
-            data.addProperty("idPedido", pedido.getIdPedido());
-            data.addProperty("codigo", pedido.getCodigo());
-            data.addProperty("fecha", pedido.getFecha().toString());
-            data.addProperty("estadoPedido",
-                    pedido.getEstadoPedido().name());
-            data.addProperty("metodoPago",
-                    pedido.getMetodoPago().name());
-            data.addProperty("nombreCliente",
-                    pedido.getNombreCliente());
-            data.addProperty("dni",
-                    pedido.getDni());
-            data.addProperty("telefono",
-                    pedido.getTelefono());
-            data.addProperty("direccionEntrega",
-                    pedido.getDireccionEntrega());
-            data.addProperty("total",
-                    pedido.getTotal());
+            obj.addProperty("idPedido", p.getIdPedido());
+            obj.addProperty("codigo", p.getCodigo());
+            obj.addProperty("cliente", p.getNombreCliente());
+            obj.addProperty("fecha", p.getFecha().toString());
+            obj.addProperty("metodoPago", p.getMetodoPago().name());
+            obj.addProperty("total", p.getTotal());
+            obj.addProperty("estado", p.getEstadoPedido().name());
 
-            //========================
-            // Detalle del pedido
-            //========================
-            JsonArray detalles = new JsonArray();
-
-            for (DetallePedido d : pedido.getDetalles()) {
-
-                JsonObject det = new JsonObject();
-
-                det.addProperty("idDetalle",
-                        d.getIdDetalleP());
-
-                det.addProperty("producto",
-                        d.getProducto().getNombre());
-
-                det.addProperty("cantidad",
-                        d.getCantidad());
-
-                det.addProperty("precioUnitario",
-                        d.getPrecioUnitario());
-
-                det.addProperty("subTotal",
-                        d.getSubTotal());
-
-                detalles.add(det);
-
-            }
-
-            data.add("detalles", detalles);
-
-            jsonResponse.addProperty("success", true);
-            jsonResponse.add("data", data);
-
-        } else {
-
-            jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message",
-                    "Pedido no encontrado");
-
+            pedidos.add(obj);
         }
 
-    } catch (NumberFormatException e) {
-
-        jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message",
-                "ID de pedido inválido");
+        jsonResponse.addProperty("success", true);
+        jsonResponse.add("data", pedidos);
 
     } catch (Exception e) {
-
         jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message",
-                "Error: " + e.getMessage());
-
+        jsonResponse.addProperty("message", e.getMessage());
     }
 
     response.getWriter().print(jsonResponse.toString());
+}
+    private void actualizarEstadoPedido(HttpServletRequest request,
+        HttpServletResponse response) throws IOException {
 
+    JsonObject jsonResponse = new JsonObject();
+
+    try {
+
+        int idPedido = Integer.parseInt(request.getParameter("idPedido"));
+
+        String estado = request.getParameter("estado");
+
+        EstadoPedido nuevoEstado = EstadoPedido.valueOf(estado);
+
+        boolean ok = peDao.actualizarEstado(idPedido, nuevoEstado);
+
+        if (ok) {
+            jsonResponse.addProperty("success", true);
+            jsonResponse.addProperty("message", "Estado actualizado");
+        } else {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "No se pudo actualizar");
+        }
+
+    } catch (Exception e) {
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("message", e.getMessage());
+    }
+
+    response.getWriter().print(jsonResponse.toString());
+}
+    private void buscarPedido(HttpServletRequest request,
+        HttpServletResponse response) throws IOException {
+
+    JsonObject jsonResponse = new JsonObject();
+
+    try {
+
+        int id = Integer.parseInt(request.getParameter("idPedido"));
+
+        Pedido p = peDao.buscarPorId(id);
+
+        jsonResponse.addProperty("success", true);
+        jsonResponse.add("data", gson.toJsonTree(p));
+
+    } catch (Exception e) {
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("message", e.getMessage());
+    }
+
+    response.getWriter().print(jsonResponse.toString());
 }
 
     @Override

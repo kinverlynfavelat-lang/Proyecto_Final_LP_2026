@@ -7,6 +7,7 @@ import Interface.IPago;
 import Model.Pago;
 import Model.Pedido;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.util.List;
 @MultipartConfig
 @WebServlet(name = "PagoController", urlPatterns = {"/PagoController"})
 public class PagoController extends HttpServlet {
@@ -67,6 +69,9 @@ public class PagoController extends HttpServlet {
 
                     validarPago(request, response);
 
+                    break;
+                case "listarPagosAdmin":
+                    listarPagosAdmin(request, response);
                     break;
 
                 default:
@@ -246,6 +251,47 @@ public class PagoController extends HttpServlet {
 
         response.getWriter().print(jsonResponse.toString());
 
+    }
+
+
+    private void listarPagosAdmin(HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+
+        JsonObject jsonResponse = new JsonObject();
+
+        try {
+
+            // ⚠️ aquí necesitas DAO método nuevo
+            List<Pago> lista = paDao.listarTodos();
+
+            JsonArray data = new JsonArray();
+
+            for (Pago p : lista) {
+
+                JsonObject obj = new JsonObject();
+
+                obj.addProperty("idPago", p.getIdPago());
+                obj.addProperty("idPedido", p.getPedido().getIdPedido());
+                obj.addProperty("metodo", p.getMetodo().name());
+                obj.addProperty("estadoPago", p.getEstadoPago().name());
+                obj.addProperty("comprobante", p.getComprobante());
+
+                if (p.getFechaPago() != null) {
+                    obj.addProperty("fechaPago", p.getFechaPago().toString());
+                }
+
+                data.add(obj);
+            }
+
+            jsonResponse.addProperty("success", true);
+            jsonResponse.add("data", data);
+
+        } catch (Exception e) {
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", e.getMessage());
+        }
+
+        response.getWriter().print(jsonResponse.toString());
     }
 
     @Override

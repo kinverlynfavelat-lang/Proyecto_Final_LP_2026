@@ -6,6 +6,7 @@ package Interface;
 
 import Enums.EstadoPago;
 import Model.Pago;
+import java.util.List;
 
 /**
  *
@@ -18,5 +19,7 @@ public interface IPago {
     Pago buscarPorPedido(int idPedido);
 
     boolean validarPago(int idPago, EstadoPago estado);
+    
+    List<Pago> listarTodos();
 
 }

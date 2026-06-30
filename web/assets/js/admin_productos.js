@@ -16,9 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function cargarTablaProductos() {
 
-    fetch("ProductoController?action=listar")
-
-            .then(res => res.json())
+fetch("ProductoController?action=listar")
+        .then(res => res.json())
 
             .then(respuesta => {
 
@@ -74,8 +73,7 @@ Editar
 <button
 class="btn btn-${producto.estadoProducto === 'ACTIVO' ? 'danger' : 'success'} btn-sm"
 
-onclick="cambiarEstado(${producto.idProducto},
-'${producto.estadoProducto}')">
+onclick="cambiarEstado(${producto.idProducto}, '${producto.estadoProducto}')">
 
 ${producto.estadoProducto === 'ACTIVO'
                             ? 'Inactivar'
@@ -138,9 +136,79 @@ function editarProducto(idProducto) {
 
 }
 
+// ======================================
+// CAMBIAR ESTADO
+// ======================================
 function cambiarEstado(idProducto, estadoActual) {
 
-    console.log(idProducto, estadoActual);
+    const nuevoEstado =
+            estadoActual === "ACTIVO"
+            ? "INACTIVO"
+            : "ACTIVO";
+
+    Swal.fire({
+        title: "¿Deseas continuar?",
+        text: "Se cambiará el estado del producto.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Sí",
+        cancelButtonText: "Cancelar"
+
+    }).then((result) => {
+
+        if (!result.isConfirmed)
+            return;
+
+        fetch("ProductoController", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+
+            body:
+                    "action=cambiarEstado"
+                    + "&idProducto=" + idProducto
+                    + "&estadoProducto=" + nuevoEstado
+
+        })
+
+                .then(res => res.json())
+
+                .then(data => {
+
+                    console.log(data);
+
+                    if (data.success) {
+
+                        Swal.fire(
+                                "Correcto",
+                                data.message,
+                                "success"
+                                );
+
+                        cargarTablaProductos();
+
+                    } else {
+
+                        Swal.fire(
+                                "Error",
+                                data.message,
+                                "error"
+                                );
+
+                    }
+
+                })
+
+                .catch(error => {
+
+                    console.error(error);
+
+                });
+
+    });
 
 }
 // ================================
@@ -180,7 +248,7 @@ document.getElementById("formProducto").addEventListener("submit", function (e) 
             .then(res => res.json())
 
             .then(data => {
-
+        
                 if (data.success) {
 
                     Swal.fire({

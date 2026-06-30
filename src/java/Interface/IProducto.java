@@ -23,4 +23,6 @@ public interface IProducto {
     Producto buscarPorId(int idProducto);
 
     boolean cambiarEstado(int idProducto, EstadoProducto estado);
+    
+    List<Producto> listarActivos();
 }

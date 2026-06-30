@@ -63,104 +63,303 @@
 
 </body>
 <div class="modal fade" id="modalDatosPedido">
-  <div class="modal-dialog">
-    <div class="modal-content p-3">
 
-      <h5>Datos del pedido</h5>
+    <div class="modal-dialog modal-dialog-centered">
 
-      <input id="nombreCliente" class="form-control mb-2" placeholder="Nombre">
-      <input id="dni" class="form-control mb-2" placeholder="DNI">
-      <input id="telefono" class="form-control mb-2" placeholder="Teléfono">
-      <input id="direccion" class="form-control mb-2" placeholder="Dirección">
+        <div class="modal-content border-0 shadow-lg rounded-4">
 
-      <button class="btn btn-primary w-100" onclick="pasarMetodoPago()">
-        Continuar
-      </button>
+            <div class="modal-header bg-warning">
+
+                <h4 class="fw-bold mb-0">
+                    Datos de entrega
+                </h4>
+
+                <button class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body p-4">
+
+                <input id="nombreCliente"
+                       class="form-control mb-3"
+                       placeholder="Nombre completo">
+
+                <input id="dni"
+                       class="form-control mb-3"
+                       placeholder="DNI">
+
+                <input id="telefono"
+                       class="form-control mb-3"
+                       placeholder="Teléfono">
+
+                <textarea
+                    id="direccion"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Dirección de entrega"></textarea>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-warning w-100 fw-bold"
+                    onclick="pasarMetodoPago()">
+
+                    Continuar →
+
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
-  </div>
+
 </div>
+
+
 <div class="modal fade" id="modalMetodoPago">
-  <div class="modal-dialog">
-    <div class="modal-content p-3 text-center">
 
-      <h5>Selecciona método de pago</h5>
+<div class="modal-dialog modal-dialog-centered">
 
-      <button class="btn btn-warning w-100 mb-2"
-        onclick="confirmarMetodoPago('YAPE')">
-        Yape
-      </button>
+<div class="modal-content border-0 shadow rounded-4">
 
-      <button class="btn btn-primary w-100"
-        onclick="confirmarMetodoPago('PLIN')">
-        Plin
-      </button>
+<div class="modal-header">
 
-    </div>
-  </div>
+<h4 class="fw-bold">
+Selecciona un método de pago
+</h4>
+
 </div>
+
+<div class="modal-body">
+
+<div class="row g-3">
+
+<div class="col-6">
+
+<button
+class="btn btn-outline-success w-100 py-4"
+onclick="confirmarMetodoPago('YAPE')">
+
+<img src="assets/img/yape.png"
+width="70"
+class="mb-2">
+
+<br>
+
+<b>Yape</b>
+
+</button>
+
+</div>
+
+<div class="col-6">
+
+<button
+class="btn btn-outline-primary w-100 py-4"
+onclick="confirmarMetodoPago('PLIN')">
+
+<img src="assets/img/plin.png"
+width="70"
+class="mb-2">
+
+<br>
+
+<b>Plin</b>
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
 <div class="modal fade" id="modalResumenPedido">
-  <div class="modal-dialog">
-    <div class="modal-content p-3">
 
-      <h5>Resumen del pedido</h5>
+<div class="modal-dialog modal-dialog-centered">
 
-      <p>Código: <span id="res-codigo"></span></p>
-      <p>Método: <span id="res-metodo"></span></p>
-      <p>Total: <span id="res-total"></span></p>
+<div class="modal-content border-0 shadow-lg rounded-4">
 
-      <hr>
+<div class="modal-header bg-success text-white">
 
-      <p class="text-center">💚 Yape: 935715194</p>
+<h4 class="fw-bold">
 
-      <button class="btn btn-success w-100"
-        onclick="abrirModalComprobante()">
-        Subir comprobante
-      </button>
+Resumen del pedido
 
-    </div>
-  </div>
+</h4>
+
 </div>
+
+<div class="modal-body text-center">
+
+<h2 id="res-codigo"></h2>
+
+<hr>
+
+<p>
+
+Método de pago
+
+</p>
+
+<h4 id="res-metodo"></h4>
+
+<hr>
+
+<h3 id="res-total"></h3>
+
+<hr>
+
+<img
+src="assets/img/yape.png"
+width="120"
+class="mb-3">
+
+<p class="fw-bold">
+
+935 715 194
+
+</p>
+
+<p class="text-muted">
+
+Realiza el pago y luego sube el comprobante.
+
+</p>
+
+<button
+class="btn btn-success w-100"
+onclick="abrirModalComprobante()">
+
+Subir comprobante
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
 <div class="modal fade" id="modalComprobante">
-  <div class="modal-dialog">
-    <div class="modal-content p-3">
 
-      <h5>Subir comprobante</h5>
+<div class="modal-dialog modal-dialog-centered">
 
-      <form id="form-comprobante">
+<div class="modal-content border-0 shadow rounded-4">
 
-        <input type="file" name="comprobante" class="form-control mb-3" required>
+<div class="modal-header">
 
-        <button type="button" class="btn btn-primary w-100"
-          onclick="enviarComprobante()">
-          Enviar comprobante
-        </button>
+<h4>Enviar comprobante</h4>
 
-      </form>
-
-    </div>
-  </div>
 </div>
+
+<div class="modal-body">
+
+<form id="form-comprobante">
+
+<input
+type="file"
+name="comprobante"
+class="form-control mb-4">
+
+<button
+type="button"
+class="btn btn-primary w-100"
+onclick="enviarComprobante()">
+
+Enviar comprobante
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
 <div class="modal fade" id="modalFinal">
-  <div class="modal-dialog">
-    <div class="modal-content text-center p-4">
 
-      <h3>🎉 Pedido confirmado</h3>
+<div class="modal-dialog modal-dialog-centered">
 
-      <p><b>Código:</b> <span id="final-codigo"></span></p>
-      <p><b>Método:</b> <span id="final-metodo"></span></p>
-      <p><b>Total:</b> <span id="final-total"></span></p>
+<div class="modal-content border-0 shadow-lg rounded-4 text-center p-5">
 
-      <p class="text-muted mt-3">
-        Recibirás confirmación cuando tu pago sea aprobado
-      </p>
+<div style="font-size:70px">
 
-      <button class="btn btn-success w-100"
-        onclick="volverAlMenu()">
-        Volver al menú
-      </button>
+✅
 
-    </div>
-  </div>
+</div>
+
+<h2 class="fw-bold mt-3">
+
+¡Pedido registrado!
+
+</h2>
+
+<p>
+
+Código
+
+</p>
+
+<h3 id="final-codigo"></h3>
+
+<p>
+
+Método
+
+</p>
+
+<h5 id="final-metodo"></h5>
+
+<p>
+
+Total
+
+</p>
+
+<h3 id="final-total"></h3>
+
+<div class="alert alert-warning mt-4">
+
+Tu pedido fue registrado correctamente.
+
+Esperaremos la validación del pago para comenzar su preparación.
+
+</div>
+
+<button
+class="btn btn-success btn-lg w-100"
+onclick="volverAlMenu()">
+
+Volver al menú
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 </html>

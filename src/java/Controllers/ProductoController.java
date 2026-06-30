@@ -54,6 +54,9 @@ public class ProductoController extends HttpServlet {
             case "cambiarEstado":
                 cambiarEstado(request, response);
                 break;
+            case "listarActivos":
+                listarActivos(request, response);
+                break;
 
             default:
                 listarProductos(request, response);
@@ -73,7 +76,6 @@ public class ProductoController extends HttpServlet {
         try {
 
             List<Producto> lista = pDao.listar();
-
             jsonResponse.addProperty("success", true);
             jsonResponse.add("data", gson.toJsonTree(lista));
 
@@ -88,9 +90,10 @@ public class ProductoController extends HttpServlet {
         response.getWriter().print(jsonResponse.toString());
 
     }
-        //=========================================
+    //=========================================
     // GUARDAR PRODUCTO
     //=========================================
+
     private void guardarProducto(HttpServletRequest request,
             HttpServletResponse response)
             throws IOException {
@@ -108,7 +111,6 @@ public class ProductoController extends HttpServlet {
             //==============================
             // VALIDACIONES
             //==============================
-
             if (nombre == null || nombre.trim().isEmpty()) {
 
                 jsonResponse.addProperty("success", false);
@@ -158,7 +160,6 @@ public class ProductoController extends HttpServlet {
             //==============================
             // IMAGEN
             //==============================
-
             Part part = request.getPart("imagen");
 
             if (part == null || part.getSize() == 0) {
@@ -222,122 +223,124 @@ public class ProductoController extends HttpServlet {
         response.getWriter().print(jsonResponse.toString());
 
     }
+
     private void editarProducto(HttpServletRequest request,
-        HttpServletResponse response) throws IOException {
+            HttpServletResponse response) throws IOException {
 
-    JsonObject jsonResponse = new JsonObject();
+        JsonObject jsonResponse = new JsonObject();
 
-    try {
+        try {
 
-        int idProducto = Integer.parseInt(request.getParameter("idProducto"));
+            int idProducto = Integer.parseInt(request.getParameter("idProducto"));
 
-        Producto producto = pDao.buscarPorId(idProducto);
+            Producto producto = pDao.buscarPorId(idProducto);
 
-        if (producto == null) {
+            if (producto == null) {
 
-            jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "Producto no encontrado");
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Producto no encontrado");
 
-            response.getWriter().print(jsonResponse.toString());
-            return;
+                response.getWriter().print(jsonResponse.toString());
+                return;
 
-        }
-
-        String nombre = request.getParameter("nombre");
-        String descripcion = request.getParameter("descripcion");
-        String precio = request.getParameter("precio");
-
-        if (nombre == null || nombre.trim().isEmpty()) {
-
-            jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "El nombre es obligatorio");
-
-            response.getWriter().print(jsonResponse.toString());
-            return;
-
-        }
-
-        if (descripcion == null || descripcion.trim().isEmpty()) {
-
-            jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "La descripción es obligatoria");
-
-            response.getWriter().print(jsonResponse.toString());
-            return;
-
-        }
-
-        if (precio == null || precio.trim().isEmpty()) {
-
-            jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "El precio es obligatorio");
-
-            response.getWriter().print(jsonResponse.toString());
-            return;
-
-        }
-
-        double precioProducto = Double.parseDouble(precio);
-
-        if (precioProducto <= 0) {
-
-            jsonResponse.addProperty("success", false);
-            jsonResponse.addProperty("message", "El precio debe ser mayor que cero");
-
-            response.getWriter().print(jsonResponse.toString());
-            return;
-
-        }
-
-        producto.setNombre(nombre.trim());
-        producto.setDescripcion(descripcion.trim());
-        producto.setPrecio(precioProducto);
-
-        Part part = request.getPart("imagen");
-
-        if (part != null && part.getSize() > 0) {
-
-            String fileName = part.getSubmittedFileName();
-
-            String uploadPath = getServletContext().getRealPath("/")
-                    + "assets/img/productos";
-
-            File carpeta = new File(uploadPath);
-
-            if (!carpeta.exists()) {
-                carpeta.mkdirs();
             }
 
-            part.write(uploadPath + File.separator + fileName);
+            String nombre = request.getParameter("nombre");
+            String descripcion = request.getParameter("descripcion");
+            String precio = request.getParameter("precio");
 
-            producto.setImagen("assets/img/productos/" + fileName);
+            if (nombre == null || nombre.trim().isEmpty()) {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "El nombre es obligatorio");
+
+                response.getWriter().print(jsonResponse.toString());
+                return;
+
+            }
+
+            if (descripcion == null || descripcion.trim().isEmpty()) {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "La descripción es obligatoria");
+
+                response.getWriter().print(jsonResponse.toString());
+                return;
+
+            }
+
+            if (precio == null || precio.trim().isEmpty()) {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "El precio es obligatorio");
+
+                response.getWriter().print(jsonResponse.toString());
+                return;
+
+            }
+
+            double precioProducto = Double.parseDouble(precio);
+
+            if (precioProducto <= 0) {
+
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "El precio debe ser mayor que cero");
+
+                response.getWriter().print(jsonResponse.toString());
+                return;
+
+            }
+
+            producto.setNombre(nombre.trim());
+            producto.setDescripcion(descripcion.trim());
+            producto.setPrecio(precioProducto);
+
+            Part part = request.getPart("imagen");
+
+            if (part != null && part.getSize() > 0) {
+
+                String fileName = part.getSubmittedFileName();
+
+                String uploadPath = getServletContext().getRealPath("/")
+                        + "assets/img/productos";
+
+                File carpeta = new File(uploadPath);
+
+                if (!carpeta.exists()) {
+                    carpeta.mkdirs();
+                }
+
+                part.write(uploadPath + File.separator + fileName);
+
+                producto.setImagen("assets/img/productos/" + fileName);
+
+            }
+
+            boolean actualizado = pDao.actualizar(producto);
+
+            jsonResponse.addProperty("success", actualizado);
+            jsonResponse.addProperty("message",
+                    actualizado
+                            ? "Producto actualizado correctamente"
+                            : "No fue posible actualizar el producto");
+
+        } catch (NumberFormatException e) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Precio inválido");
+
+        } catch (Exception e) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Error: " + e.getMessage());
 
         }
 
-        boolean actualizado = pDao.actualizar(producto);
-
-        jsonResponse.addProperty("success", actualizado);
-        jsonResponse.addProperty("message",
-                actualizado
-                ? "Producto actualizado correctamente"
-                : "No fue posible actualizar el producto");
-
-    } catch (NumberFormatException e) {
-
-        jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message", "Precio inválido");
-
-    } catch (Exception e) {
-
-        jsonResponse.addProperty("success", false);
-        jsonResponse.addProperty("message", "Error: " + e.getMessage());
+        response.getWriter().print(jsonResponse.toString());
 
     }
 
-    response.getWriter().print(jsonResponse.toString());
-
-}
-        private void buscarProducto(HttpServletRequest request,
+    private void buscarProducto(HttpServletRequest request,
             HttpServletResponse response)
             throws IOException {
 
@@ -423,6 +426,27 @@ public class ProductoController extends HttpServlet {
 
         processRequest(request, response);
 
+    }
+
+    private void listarActivos(HttpServletRequest request,
+            HttpServletResponse response) throws IOException {
+
+        JsonObject jsonResponse = new JsonObject();
+
+        try {
+
+            List<Producto> lista = pDao.listarActivos();
+
+            jsonResponse.addProperty("success", true);
+            jsonResponse.add("data", gson.toJsonTree(lista));
+
+        } catch (Exception e) {
+
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", e.getMessage());
+        }
+
+        response.getWriter().print(jsonResponse.toString());
     }
 
     @Override

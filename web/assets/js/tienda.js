@@ -18,7 +18,7 @@ async function cargarProductos() {
 
     try {
 
-        const response = await fetch("AppController?action=listarProductos");
+        const response = await fetch("ProductoController?action=listarActivos");
         const result = await response.json();
 
         if (!result.success) {
@@ -280,20 +280,20 @@ document.addEventListener("DOMContentLoaded", () => {
 function iniciarCompra() {
 
     fetch("AppController?action=listarCarrito")
-        .then(res => res.json())
-        .then(data => {
+            .then(res => res.json())
+            .then(data => {
 
-            // ⚠️ tu backend devuelve "carrito"
-            if (!data.carrito || data.carrito.length === 0) {
-                Swal.fire("Carrito vacío");
-                return;
-            }
+                // ⚠️ tu backend devuelve "carrito"
+                if (!data.carrito || data.carrito.length === 0) {
+                    Swal.fire("Carrito vacío");
+                    return;
+                }
 
-            $('#modalDatosPedido').modal('show');
-        })
-        .catch(() => {
-            Swal.fire("Error", "No se pudo cargar el carrito");
-        });
+                $('#modalDatosPedido').modal('show');
+            })
+            .catch(() => {
+                Swal.fire("Error", "No se pudo cargar el carrito");
+            });
 }
 
 
@@ -344,31 +344,31 @@ function confirmarMetodoPago(metodo) {
 
     fetch("AppController?action=generarPedido", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
         body: new URLSearchParams(data)
     })
-    .then(res => res.json())
-    .then(data => {
+            .then(res => res.json())
+            .then(data => {
 
-        if (!data.success) {
-            console.log("ERROR BACKEND:", data.message);
-            Swal.fire("Error", data.message);
-            return;
-        }
+                if (!data.success) {
+                    console.log("ERROR BACKEND:", data.message);
+                    Swal.fire("Error", data.message);
+                    return;
+                }
 
-        const pedidoFinal = {
-            ...pedido,
-            metodoPago: metodo,
-            idPedido: data.idPedido,
-            codigo: data.codigo
-        };
+                const pedidoFinal = {
+                    ...pedido,
+                    metodoPago: metodo,
+                    idPedido: data.idPedido,
+                    codigo: data.codigo
+                };
 
-        sessionStorage.setItem("pedidoActual", JSON.stringify(pedidoFinal));
+                sessionStorage.setItem("pedidoActual", JSON.stringify(pedidoFinal));
 
-        $('#modalMetodoPago').modal('hide');
+                $('#modalMetodoPago').modal('hide');
 
-        mostrarResumenPedido(pedidoFinal);
-    });
+                mostrarResumenPedido(pedidoFinal);
+            });
 }
 
 // ==========================

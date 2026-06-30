@@ -35,7 +35,6 @@ async function init() {
         await loadComponent('header-placeholder', 'header.html');
         await loadComponent('footer-placeholder', 'footer.html');
 
-
         // 2. LIBRERÍAS
         await loadScript('assets/js/jquery-3.6.0.min.js');
         await loadScript('assets/js/jquery.dataTables.min.js');
@@ -43,55 +42,51 @@ async function init() {
         await loadScript('assets/js/bootstrap.bundle.min.js');
         await loadScript('https://cdn.jsdelivr.net/npm/sweetalert2@11');
 
-
-        // 3. LÓGICA PRINCIPAL DE TIENDA
+        // 3. LÓGICA
         await loadScript("assets/js/auth.js");
-await loadScript("assets/js/tienda.js");
-        
+        await loadScript("assets/js/tienda.js");
 
+        // 4. ESPERA SEGURA (DOM READY REAL)
+        await new Promise(resolve => setTimeout(resolve, 400));
 
-        // 4. INICIALIZACIÓN SEGURA
-        setTimeout(() => {
+        // 🔐 SESIÓN
+        if (typeof verificarSesion === 'function') {
+            verificarSesion();
+        }
 
-            // 🔐 SESIÓN
-            if (typeof verificarSesion === 'function') {
-                verificarSesion();
-            }
+        // 🛍️ PRODUCTOS
+        if (typeof cargarProductos === 'function') {
+            cargarProductos();
+        }
 
-            // 🛍️ PRODUCTOS
-            if (typeof cargarProductos === 'function') {
-                cargarProductos();
-            }
+        // 🎯 AUTH EVENTS
+        if (typeof inicializarEventosAuth === 'function') {
+            inicializarEventosAuth();
+        }
 
-            // 🎯 EVENTOS AUTH
-            if (typeof inicializarEventosAuth === 'function') {
-                inicializarEventosAuth();
-            }
+        // 📊 ADMIN
+        if (typeof cargarTablaAdmin === 'function') {
+            cargarTablaAdmin();
+        }
 
-            // 📊 ADMIN TABLAS
-            if (typeof cargarTablaAdmin === 'function') {
-                cargarTablaAdmin();
-            }
+        // 🛒 CARRITO
+        if (typeof refrescarCarrito === 'function') {
+            refrescarCarrito();
+        }
 
-            // 🛒 CARRITO (SISTEMA ÚNICO)
-            if (typeof refrescarCarrito === 'function') {
-                refrescarCarrito();
-            }
-
-            // 📜 HISTORIAL
-            if (typeof cargarHistorial === 'function') {
-                cargarHistorial();
-            }
-
-        }, 200);
+        // 📜 HISTORIAL
+        if (typeof cargarHistorial === 'function') {
+            cargarHistorial();
+        }
 
     } catch (error) {
         console.error("Error cargando la aplicación:", error);
     }
 }
 
+// INIT
+init();
 
 // ==========================
 // INICIAR APP
 // ==========================
-init();

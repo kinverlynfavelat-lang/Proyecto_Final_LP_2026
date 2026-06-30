@@ -2,153 +2,152 @@
 
 <html lang="es">
 
-<head>
+    <head>
 
-    <meta charset="UTF-8">
+        <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
 
-    <title>Personalizar hamburguesa</title>
+        <title>Personalizar hamburguesa</title>
 
-    <div id="head-placeholder"></div>
-
+    <head id="head-placeholder"></head>
 </head>
 
 <body>
 
-<header id="header-placeholder"></header>
+    <header id="header-placeholder"></header>
 
-<main class="container py-5">
+    <main class="container py-5">
 
-    <!-- Botón volver -->
+        <!-- Botón volver -->
 
-    <div class="mb-4">
+        <div class="mb-4">
 
-        <a href="index.html"
-           class="text-decoration-none text-dark">
+            <a href="index.html"
+               class="text-decoration-none text-dark">
 
-            <i class="bi bi-arrow-left"></i>
+                <i class="bi bi-arrow-left"></i>
 
-            Volver al menú
+                Volver al menú
 
-        </a>
-
-    </div>
-
-
-    <div class="row">
-
-        <!-- Imagen -->
-
-        <div class="col-lg-5">
-
-            <img
-                id="producto-imagen"
-                class="img-fluid rounded shadow">
+            </a>
 
         </div>
 
 
-        <!-- Información -->
+        <div class="row">
 
-        <div class="col-lg-7">
+            <!-- Imagen -->
 
-            <h2
-                id="producto-nombre"
-                class="fw-bold">
+            <div class="col-lg-5">
 
-            </h2>
+                <img
+                    id="producto-imagen"
+                    class="img-fluid rounded shadow">
 
-            <p
-                id="producto-descripcion"
-                class="text-muted">
+            </div>
 
-            </p>
 
-            <h3
-                id="producto-precio"
-                class="fw-bold text-danger">
+            <!-- Información -->
 
-            </h3>
+            <div class="col-lg-7">
 
-            <hr>
+                <h2
+                    id="producto-nombre"
+                    class="fw-bold">
 
-            <h5 class="fw-bold">
+                </h2>
 
-                Personaliza tu hamburguesa
+                <p
+                    id="producto-descripcion"
+                    class="text-muted">
 
-            </h5>
+                </p>
 
-            <div id="lista-ingredientes">
+                <h3
+                    id="producto-precio"
+                    class="fw-bold text-danger">
 
-                <div class="text-center py-3">
+                </h3>
 
-                    Cargando ingredientes...
+                <hr>
+
+                <h5 class="fw-bold">
+
+                    Personaliza tu hamburguesa
+
+                </h5>
+
+                <div id="lista-ingredientes">
+
+                    <div class="text-center py-3">
+
+                        Cargando ingredientes...
+
+                    </div>
 
                 </div>
 
-            </div>
+                <hr>
 
-            <hr>
+                <div class="d-flex align-items-center mb-4">
 
-            <div class="d-flex align-items-center mb-4">
+                    <button
+                        class="btn btn-outline-dark"
+                        onclick="disminuirCantidad()">
+
+                        -
+
+                    </button>
+
+                    <span
+                        id="cantidad"
+                        class="mx-4 fs-4">
+
+                        1
+
+                    </span>
+
+                    <button
+                        class="btn btn-outline-dark"
+                        onclick="aumentarCantidad()">
+
+                        +
+
+                    </button>
+
+                </div>
+
+                <h3>
+
+                    Total:
+
+                    <span id="precio-total">
+
+                        S/ 0.00
+
+                    </span>
+
+                </h3>
 
                 <button
-                    class="btn btn-outline-dark"
-                    onclick="disminuirCantidad()">
+                    class="btn btn-danger btn-lg mt-3"
+                    onclick="agregarProductoPersonalizado()">
 
-                    -
+                    Añadir al carrito
 
                 </button>
 
-                <span
-                    id="cantidad"
-                    class="mx-4 fs-4">
-
-                    1
-
-                </span>
-
-                <button
-                    class="btn btn-outline-dark"
-                    onclick="aumentarCantidad()">
-
-                    +
-
-                </button>
-
             </div>
-
-            <h3>
-
-                Total:
-
-                <span id="precio-total">
-
-                    S/ 0.00
-
-                </span>
-
-            </h3>
-
-            <button
-                class="btn btn-danger btn-lg mt-3"
-                onclick="agregarProductoPersonalizado()">
-
-                Añadir al carrito
-
-            </button>
 
         </div>
 
-    </div>
+    </main>
 
-</main>
+    <footer id="footer-placeholder"></footer>
 
-<footer id="footer-placeholder"></footer>
-
-<script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js"></script>
 
 </body>
 

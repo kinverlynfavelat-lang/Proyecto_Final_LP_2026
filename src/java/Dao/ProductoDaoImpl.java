@@ -305,4 +305,39 @@ public class ProductoDaoImpl implements IProducto {
         return flag;
     }
 
+    @Override
+public List<Producto> listarActivos() {
+
+    List<Producto> lista = new ArrayList<>();
+
+    String sql = "SELECT * FROM producto WHERE UPPER(TRIM(estadoProducto)) = 'ACTIVO'";
+
+    try (Connection cn = ConexionSingleton.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+
+            Producto p = new Producto();
+            p.setIdProducto(rs.getInt("idProducto"));
+            p.setNombre(rs.getString("nombre"));
+            p.setDescripcion(rs.getString("descripcion"));
+            p.setPrecio(rs.getDouble("precio"));
+            p.setImagen(rs.getString("imagen"));
+
+            p.setEstadoProducto(
+                EstadoProducto.valueOf(
+                    rs.getString("estadoProducto").trim().toUpperCase()
+                )
+            );
+
+            lista.add(p);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return lista;
+}
 }
