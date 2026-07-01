@@ -31,32 +31,39 @@ async function cargarProductos() {
         result.data.forEach(p => {
 
             contenedor.innerHTML += `
-                <div class="col-md-3">
+                <div class="col-6 col-md-3 mb-4">
 
-                    <div class="card shadow-sm h-100">
+    <div class="card product-card h-100 shadow-sm border-0">
 
-                        <img src="${p.imagen}" class="card-img-top" style="cursor:pointer;">
+        <img src="${p.imagen}"
+             class="card-img-top product-img">
 
-                        <div class="card-body">
+        <div class="card-body d-flex flex-column">
 
-                            <h5 class="card-title">${p.nombre}</h5>
+            <h6 class="fw-bold mb-1 text-truncate">
+                ${p.nombre}
+            </h6>
 
-                            <h6 class="fw-bold">S/ ${p.precio}</h6>
+            <small class="text-muted mb-2 small-desc">
+                ${p.descripcion}
+            </small>
 
-                            <p class="text-muted">${p.descripcion}</p>
+            <h6 class="product-price mb-3">
+    S/ ${p.precio}
+</h6>
 
-                            <button class="btn w-100"
-                                style="background:#ffbc0d; color:#000; font-weight:600;"
-                                onclick="agregarAlCarrito(${p.idProducto})">
+            <button class="btn btn-sm w-100 mt-auto add-btn"
+                    onclick="agregarAlCarrito(${p.idProducto})">
 
-                                Agregar
-                            </button>
+                Agregar
 
-                        </div>
+            </button>
 
-                    </div>
+        </div>
 
-                </div>
+    </div>
+
+</div>
             `;
         });
 

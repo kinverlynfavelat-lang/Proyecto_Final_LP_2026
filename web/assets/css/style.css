@@ -45,3 +45,71 @@ main {
 .btn{
     border-radius:12px;
 }
+/* =========================
+   PRODUCT CARDS
+========================= */
+
+.product-card{
+    border-radius: 18px;
+    overflow: hidden;
+
+    /* borde más pronunciado */
+    border: 2px solid #ffe08a;
+
+    background: #fff;
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover{
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.15);
+}
+
+/* imagen uniforme */
+.product-img{
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+}
+
+/* =========================
+   TEXTO
+========================= */
+
+.product-card h6{
+    color: #1f1f1f; /* evita rojos raros */
+}
+
+/* precio bien alineado a tu marca */
+.product-price{
+    color: #b87900 !important;  /* dorado oscuro bonito */
+    font-weight: 800;
+}
+
+/* descripción */
+.small-desc{
+    font-size: 12px;
+    height: 34px;
+    overflow: hidden;
+    color: #666;
+}
+
+.add-btn {
+    background-color: #fff3c4;
+    border: 2px solid #ffc01b;
+    color: #000;
+    font-weight: 700;
+    border-radius: 12px;
+
+    transition: all 0.25s ease;
+}
+
+.add-btn:hover {
+    background-color: #ffc01b;
+    transform: scale(1.04);
+}
+.navbar.navbar-custom {
+    background-color: #ffefbf !important;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+}
