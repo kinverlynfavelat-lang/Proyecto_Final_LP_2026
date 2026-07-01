@@ -9,7 +9,6 @@ import Enums.EstadoPedido;
 import Enums.MetodoPago;
 import Interface.IPedido;
 import Model.Carrito;
-import Model.Ingrediente;
 import Model.Pedido;
 import Model.Producto;
 import Model.Usuario;
@@ -35,7 +34,7 @@ public class TestPedido {
 
     Pedido pedido = new Pedido();
 
-    pedido.setCodigo("PED-00029");
+    pedido.setCodigo("PED-00045");
 
     pedido.setEstadoPedido(EstadoPedido.ENTREGADO);
 
@@ -73,25 +72,7 @@ public class TestPedido {
 
     item1.setSubTotal(37.00);
 
-    //---------------------------------------
-    // Ingredientes del producto 1
-    //---------------------------------------
-
-    Ingrediente i1 = new Ingrediente();
-
-    i1.setIdIngrediente(1);
-
-    Ingrediente i2 = new Ingrediente();
-
-    i2.setIdIngrediente(2);
-
-    List<Ingrediente> ingredientes = new ArrayList<>();
-
-    ingredientes.add(i1);
-
-    ingredientes.add(i2);
-
-    item1.setIngredientes(ingredientes);
+    
 
     
 

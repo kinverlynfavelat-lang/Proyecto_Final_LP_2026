@@ -17,20 +17,19 @@ public class Carrito {
     private int cantidad;
     private double precioCompra;
     private double subTotal;
-    private List<Ingrediente> ingredientes;
 
     public Carrito() {
     }
 
-    public Carrito(int item, Producto producto, int cantidad, double precioCompra, double subTotal, List<Ingrediente> ingredientes) {
+    public Carrito(int item, Producto producto, int cantidad, double precioCompra, double subTotal) {
         this.item = item;
         this.producto = producto;
         this.cantidad = cantidad;
         this.precioCompra = precioCompra;
         this.subTotal = subTotal;
-        this.ingredientes = ingredientes;
     }
 
+    
     public int getItem() {
         return item;
     }
@@ -71,13 +70,6 @@ public class Carrito {
         this.subTotal = subTotal;
     }
 
-    public List<Ingrediente> getIngredientes() {
-        return ingredientes;
-    }
-
-    public void setIngredientes(List<Ingrediente> ingredientes) {
-        this.ingredientes = ingredientes;
-    }
-
+    
     
 }

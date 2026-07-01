@@ -15,7 +15,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -150,7 +149,6 @@ public class AppController extends HttpServlet {
         HttpSession session = request.getSession(false);
         Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
 
-        // 🔥 VALIDACIÓN DE LOGIN
         if (usuario == null) {
             jsonResponse.addProperty("success", false);
             jsonResponse.addProperty("message", "NO_SESSION");
@@ -527,9 +525,6 @@ public class AppController extends HttpServlet {
 
                 JsonObject data = new JsonObject();
 
-                //========================
-                // Datos del pedido
-                //========================
                 data.addProperty("idPedido", pedido.getIdPedido());
                 data.addProperty("codigo", pedido.getCodigo());
                 data.addProperty("fecha", pedido.getFecha().toString());
@@ -548,9 +543,7 @@ public class AppController extends HttpServlet {
                 data.addProperty("total",
                         pedido.getTotal());
 
-                //========================
-                // Detalle del pedido
-                //========================
+                
                 JsonArray detalles = new JsonArray();
 
                 for (DetallePedido d : pedido.getDetalles()) {
@@ -613,7 +606,7 @@ public class AppController extends HttpServlet {
 
     try {
 
-        List<Pedido> lista = peDao.listar(); // IMPORTANTE: necesitas este método en DAO
+        List<Pedido> lista = peDao.listar(); 
 
         JsonArray pedidos = new JsonArray();
 

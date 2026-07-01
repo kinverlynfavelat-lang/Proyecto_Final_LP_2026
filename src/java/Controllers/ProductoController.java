@@ -64,9 +64,7 @@ public class ProductoController extends HttpServlet {
         }
     }
 
-    //=========================================
-    // LISTAR PRODUCTOS
-    //=========================================
+   
     private void listarProductos(HttpServletRequest request,
             HttpServletResponse response)
             throws IOException {
@@ -90,10 +88,7 @@ public class ProductoController extends HttpServlet {
         response.getWriter().print(jsonResponse.toString());
 
     }
-    //=========================================
-    // GUARDAR PRODUCTO
-    //=========================================
-
+  
     private void guardarProducto(HttpServletRequest request,
             HttpServletResponse response)
             throws IOException {
@@ -108,9 +103,7 @@ public class ProductoController extends HttpServlet {
             String descripcion = request.getParameter("descripcion");
             String precio = request.getParameter("precio");
 
-            //==============================
-            // VALIDACIONES
-            //==============================
+          
             if (nombre == null || nombre.trim().isEmpty()) {
 
                 jsonResponse.addProperty("success", false);
@@ -157,9 +150,7 @@ public class ProductoController extends HttpServlet {
             producto.setDescripcion(descripcion.trim());
             producto.setPrecio(precioProducto);
 
-            //==============================
-            // IMAGEN
-            //==============================
+           
             Part part = request.getPart("imagen");
 
             if (part == null || part.getSize() == 0) {

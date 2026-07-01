@@ -20,21 +20,17 @@ public class DetallePedido {
     private Pedido pedido;
     private Producto producto;
 
-    private List<Ingrediente> ingredientes;
     public DetallePedido() {
     }
 
-    public DetallePedido(int idDetalleP, int cantidad, double precioUnitario, double subTotal, Pedido pedido, Producto producto, List<Ingrediente> ingredientes) {
+    public DetallePedido(int idDetalleP, int cantidad, double precioUnitario, double subTotal, Pedido pedido, Producto producto) {
         this.idDetalleP = idDetalleP;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
         this.subTotal = subTotal;
         this.pedido = pedido;
         this.producto = producto;
-        this.ingredientes = ingredientes;
     }
-
-    
 
     public int getIdDetalleP() {
         return idDetalleP;
@@ -84,14 +80,7 @@ public class DetallePedido {
         this.producto = producto;
     }
 
-    public List<Ingrediente> getIngredientes() {
-        return ingredientes;
-    }
-
-    public void setIngredientes(List<Ingrediente> ingredientes) {
-        this.ingredientes = ingredientes;
-    }
-    
+   
     
 
 }

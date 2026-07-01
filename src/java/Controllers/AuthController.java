@@ -61,7 +61,6 @@ public class AuthController extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
 
-            // Validar acción
 
             if (action == null || action.trim().isEmpty()) {
 
@@ -74,16 +73,13 @@ public class AuthController extends HttpServlet {
 
             }
 
-            // ==========================
-            // LOGIN
-            // ==========================
+           
 
             if ("login".equals(action)) {
 
                 String correo = request.getParameter("correo");
                 String password = request.getParameter("password");
 
-                // Validación de campos
 
                 if (correo == null || correo.trim().isEmpty()
                         || password == null || password.trim().isEmpty()) {
@@ -127,9 +123,7 @@ public class AuthController extends HttpServlet {
                 out.print(jsonResponse.toString());
 
             }
-                        // ==========================
-            // REGISTER
-            // ==========================
+                    
 
             else if ("register".equals(action)) {
 
@@ -137,7 +131,6 @@ public class AuthController extends HttpServlet {
                 String correo = request.getParameter("correo");
                 String password = request.getParameter("password");
 
-                // Validaciones
 
                 if (nombreCompleto == null || nombreCompleto.trim().isEmpty()
                         || correo == null || correo.trim().isEmpty()
@@ -206,9 +199,7 @@ public class AuthController extends HttpServlet {
 
             }
 
-            // ==========================
-            // LOGOUT
-            // ==========================
+            
 
             else if ("logout".equals(action)) {
 
@@ -246,7 +237,7 @@ else if ("check".equals(action)) {
 
     out.print(jsonResponse.toString());
 }
-else {   // 🔴 ESTE ES EL ÚLTIMO SIEMPRE
+else {   
 
     jsonResponse.addProperty("success", false);
     jsonResponse.addProperty("message", "Acción no reconocida");

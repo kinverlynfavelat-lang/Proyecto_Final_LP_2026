@@ -10,7 +10,6 @@ import Enums.EstadoProducto;
 import Enums.MetodoPago;
 import Model.Carrito;
 import Model.DetallePedido;
-import Model.Ingrediente;
 import Model.Pedido;
 import Model.Producto;
 import Util.ConexionSingleton;
@@ -31,119 +30,80 @@ public class PedidoDaoImpl implements IPedido {
 
         int idPedido = 0;
 
-    PreparedStatement st;
-    ResultSet rs;
-    String query = null;
+        PreparedStatement st;
+        ResultSet rs;
+        String query = null;
 
-    try {
+        try {
 
-        //-------------------------
-        // INSERTAR PEDIDO
-        //-------------------------
+            query = "INSERT INTO PEDIDO "
+                    + "(codigo, estadoPedido, metodoPago, nombreCliente, "
+                    + "dni, telefono, direccionEntrega, total, idUsuario) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?)";
 
-        query = "INSERT INTO PEDIDO "
-                + "(codigo, estadoPedido, metodoPago, nombreCliente, "
-                + "dni, telefono, direccionEntrega, total, idUsuario) "
-                + "VALUES (?,?,?,?,?,?,?,?,?)";
+            cn = ConexionSingleton.getConnection();
 
-        cn = ConexionSingleton.getConnection();
+            st = cn.prepareStatement(query);
 
-        st = cn.prepareStatement(query);
+            st.setString(1, pedido.getCodigo());
+            st.setString(2, pedido.getEstadoPedido().name());
+            st.setString(3, pedido.getMetodoPago().name());
+            st.setString(4, pedido.getNombreCliente());
+            st.setString(5, pedido.getDni());
+            st.setString(6, pedido.getTelefono());
+            st.setString(7, pedido.getDireccionEntrega());
+            st.setDouble(8, pedido.getTotal());
+            st.setInt(9, pedido.getUsuario().getIdUsuario());
 
-        st.setString(1, pedido.getCodigo());
-        st.setString(2, pedido.getEstadoPedido().name());
-        st.setString(3, pedido.getMetodoPago().name());
-        st.setString(4, pedido.getNombreCliente());
-        st.setString(5, pedido.getDni());
-        st.setString(6, pedido.getTelefono());
-        st.setString(7, pedido.getDireccionEntrega());
-        st.setDouble(8, pedido.getTotal());
-        st.setInt(9, pedido.getUsuario().getIdUsuario());
+            st.executeUpdate();
 
-        st.executeUpdate();
+            query = "SELECT idPedido FROM PEDIDO WHERE codigo=?";
 
-        //-------------------------
-        // OBTENER ID DEL PEDIDO
-        //-------------------------
+            st = cn.prepareStatement(query);
 
-        query = "SELECT idPedido FROM PEDIDO WHERE codigo=?";
+            st.setString(1, pedido.getCodigo());
 
-        st = cn.prepareStatement(query);
+            rs = st.executeQuery();
 
-        st.setString(1, pedido.getCodigo());
+            if (rs.next()) {
 
-        rs = st.executeQuery();
+                idPedido = rs.getInt("idPedido");
 
-        if (rs.next()) {
+            }
 
-            idPedido = rs.getInt("idPedido");
+            if (idPedido > 0) {
 
-        }
+                for (Carrito item : pedido.getDetallePedido()) {
 
-        //-------------------------
-        // INSERTAR DETALLE
-        //-------------------------
+                    int idDetallePedido = 0;
 
-        if (idPedido > 0) {
+                    query = "INSERT INTO DETALLE_PEDIDO "
+                            + "(cantidad, precioUnitario, subTotal, idPedido, idProducto) "
+                            + "VALUES (?,?,?,?,?)";
 
-            for (Carrito item : pedido.getDetallePedido()) {
+                    st = cn.prepareStatement(query);
 
-                int idDetallePedido = 0;
+                    st.setInt(1, item.getCantidad());
+                    st.setDouble(2, item.getPrecioCompra());
+                    st.setDouble(3, item.getSubTotal());
+                    st.setInt(4, idPedido);
+                    st.setInt(5, item.getProducto().getIdProducto());
 
-                query = "INSERT INTO DETALLE_PEDIDO "
-                        + "(cantidad, precioUnitario, subTotal, idPedido, idProducto) "
-                        + "VALUES (?,?,?,?,?)";
+                    st.executeUpdate();
 
-                st = cn.prepareStatement(query);
+                    query = "SELECT MAX(idDetalleP) idDetalleP "
+                            + "FROM DETALLE_PEDIDO "
+                            + "WHERE idPedido=?";
 
-                st.setInt(1, item.getCantidad());
-                st.setDouble(2, item.getPrecioCompra());
-                st.setDouble(3, item.getSubTotal());
-                st.setInt(4, idPedido);
-                st.setInt(5, item.getProducto().getIdProducto());
+                    st = cn.prepareStatement(query);
 
-                st.executeUpdate();
+                    st.setInt(1, idPedido);
 
-                //-------------------------
-                // OBTENER ID DEL DETALLE
-                //-------------------------
+                    rs = st.executeQuery();
 
-                query = "SELECT MAX(idDetalleP) idDetalleP "
-                        + "FROM DETALLE_PEDIDO "
-                        + "WHERE idPedido=?";
+                    if (rs.next()) {
 
-                st = cn.prepareStatement(query);
-
-                st.setInt(1, idPedido);
-
-                rs = st.executeQuery();
-
-                if (rs.next()) {
-
-                    idDetallePedido = rs.getInt("idDetalleP");
-
-                }
-
-                //-------------------------
-                // INSERTAR INGREDIENTES
-                //-------------------------
-
-                if (item.getIngredientes() != null
-                        && !item.getIngredientes().isEmpty()) {
-
-                    for (Ingrediente ingrediente : item.getIngredientes()) {
-
-                        query = "INSERT INTO DETALLE_PEDIDO_INGR "
-                                + "(idIngrediente,idDetalleP,cantidad) "
-                                + "VALUES(?,?,?)";
-
-                        st = cn.prepareStatement(query);
-
-                        st.setInt(1, ingrediente.getIdIngrediente());
-                        st.setInt(2, idDetallePedido);
-                        st.setInt(3, 1);
-
-                        st.executeUpdate();
+                        idDetallePedido = rs.getInt("idDetalleP");
 
                     }
 
@@ -151,30 +111,28 @@ public class PedidoDaoImpl implements IPedido {
 
             }
 
-        }
+        } catch (Exception e) {
 
-    } catch (Exception e) {
+            System.out.println("Error al generar pedido " + e.getMessage());
 
-        System.out.println("Error al generar pedido " + e.getMessage());
-
-        try {
-            cn.rollback();
-        } catch (Exception ex) {
-        }
-
-    } finally {
-
-        if (cn != null) {
             try {
-                cn.close();
+                cn.rollback();
             } catch (Exception ex) {
-                System.out.println("Error al cerrar conexión");
             }
+
+        } finally {
+
+            if (cn != null) {
+                try {
+                    cn.close();
+                } catch (Exception ex) {
+                    System.out.println("Error al cerrar conexión");
+                }
+            }
+
         }
 
-    }
-
-    return idPedido;
+        return idPedido;
     }
 
     @Override
@@ -247,64 +205,15 @@ public class PedidoDaoImpl implements IPedido {
 
         Pedido pe = null;
 
-    PreparedStatement st;
-    ResultSet rs;
-    String query = null;
+        PreparedStatement st;
+        ResultSet rs;
+        String query = null;
 
-    try {
+        try {
 
-        //-------------------------
-        // CABECERA DEL PEDIDO
-        //-------------------------
+            query = "SELECT * FROM PEDIDO WHERE idPedido=?";
 
-        query = "SELECT * FROM PEDIDO WHERE idPedido=?";
-
-        cn = ConexionSingleton.getConnection();
-
-        st = cn.prepareStatement(query);
-
-        st.setInt(1, idPedido);
-
-        rs = st.executeQuery();
-
-        if (rs.next()) {
-
-            pe = new Pedido();
-
-            pe.setIdPedido(rs.getInt("idPedido"));
-            pe.setCodigo(rs.getString("codigo"));
-            pe.setFecha(rs.getTimestamp("fecha").toLocalDateTime());
-
-            pe.setEstadoPedido(
-                    EstadoPedido.valueOf(
-                            rs.getString("estadoPedido"))
-            );
-
-            pe.setMetodoPago(
-                    MetodoPago.valueOf(
-                            rs.getString("metodoPago"))
-            );
-
-            pe.setNombreCliente(rs.getString("nombreCliente"));
-            pe.setDni(rs.getString("dni"));
-            pe.setTelefono(rs.getString("telefono"));
-            pe.setDireccionEntrega(rs.getString("direccionEntrega"));
-            pe.setTotal(rs.getDouble("total"));
-
-            //-------------------------
-            // DETALLE DEL PEDIDO
-            //-------------------------
-
-            List<DetallePedido> detalles = new ArrayList<>();
-
-            query = "SELECT dp.idDetalleP, dp.cantidad, "
-                    + "dp.precioUnitario, dp.subTotal, "
-                    + "p.idProducto, p.nombre, p.descripcion, "
-                    + "p.precio, p.imagen, p.estadoProducto "
-                    + "FROM DETALLE_PEDIDO dp "
-                    + "INNER JOIN PRODUCTO p "
-                    + "ON dp.idProducto = p.idProducto "
-                    + "WHERE dp.idPedido=?";
+            cn = ConexionSingleton.getConnection();
 
             st = cn.prepareStatement(query);
 
@@ -312,92 +221,101 @@ public class PedidoDaoImpl implements IPedido {
 
             rs = st.executeQuery();
 
-            while (rs.next()) {
+            if (rs.next()) {
 
-                DetallePedido detalle = new DetallePedido();
+                pe = new Pedido();
 
-                detalle.setIdDetalleP(rs.getInt("idDetalleP"));
-                detalle.setCantidad(rs.getInt("cantidad"));
-                detalle.setPrecioUnitario(rs.getDouble("precioUnitario"));
-                detalle.setSubTotal(rs.getDouble("subTotal"));
+                pe.setIdPedido(rs.getInt("idPedido"));
+                pe.setCodigo(rs.getString("codigo"));
+                pe.setFecha(rs.getTimestamp("fecha").toLocalDateTime());
 
-                Producto producto = new Producto();
-
-                producto.setIdProducto(rs.getInt("idProducto"));
-                producto.setNombre(rs.getString("nombre"));
-                producto.setDescripcion(rs.getString("descripcion"));
-                producto.setPrecio(rs.getDouble("precio"));
-                producto.setImagen(rs.getString("imagen"));
-
-                producto.setEstadoProducto(
-                        EstadoProducto.valueOf(
-                                rs.getString("estadoProducto"))
+                pe.setEstadoPedido(
+                        EstadoPedido.valueOf(
+                                rs.getString("estadoPedido"))
                 );
 
-                detalle.setProducto(producto);
-
-                //-------------------------
-                // INGREDIENTES DEL DETALLE
-                //-------------------------
-
-                List<Ingrediente> ingredientes = new ArrayList<>();
-
-                PreparedStatement stIng = cn.prepareStatement(
-                        "SELECT i.idIngrediente, i.nombre, i.precioExtra "
-                        + "FROM DETALLE_PEDIDO_INGR di "
-                        + "INNER JOIN INGREDIENTE i "
-                        + "ON di.idIngrediente=i.idIngrediente "
-                        + "WHERE di.idDetalleP=?"
+                pe.setMetodoPago(
+                        MetodoPago.valueOf(
+                                rs.getString("metodoPago"))
                 );
 
-                stIng.setInt(1, detalle.getIdDetalleP());
+                pe.setNombreCliente(rs.getString("nombreCliente"));
+                pe.setDni(rs.getString("dni"));
+                pe.setTelefono(rs.getString("telefono"));
+                pe.setDireccionEntrega(rs.getString("direccionEntrega"));
+                pe.setTotal(rs.getDouble("total"));
 
-                ResultSet rsIng = stIng.executeQuery();
+                List<DetallePedido> detalles = new ArrayList<>();
 
-                while (rsIng.next()) {
+                query = "SELECT dp.idDetalleP, dp.cantidad, "
+                        + "dp.precioUnitario, dp.subTotal, "
+                        + "p.idProducto, p.nombre, p.descripcion, "
+                        + "p.precio, p.imagen, p.estadoProducto "
+                        + "FROM DETALLE_PEDIDO dp "
+                        + "INNER JOIN PRODUCTO p "
+                        + "ON dp.idProducto = p.idProducto "
+                        + "WHERE dp.idPedido=?";
 
-                    Ingrediente ing = new Ingrediente();
+                st = cn.prepareStatement(query);
 
-                    ing.setIdIngrediente(rsIng.getInt("idIngrediente"));
-                    ing.setNombre(rsIng.getString("nombre"));
-                    ing.setPrecioExtra(rsIng.getDouble("precioExtra"));
+                st.setInt(1, idPedido);
 
-                    ingredientes.add(ing);
+                rs = st.executeQuery();
+
+                while (rs.next()) {
+
+                    DetallePedido detalle = new DetallePedido();
+
+                    detalle.setIdDetalleP(rs.getInt("idDetalleP"));
+                    detalle.setCantidad(rs.getInt("cantidad"));
+                    detalle.setPrecioUnitario(rs.getDouble("precioUnitario"));
+                    detalle.setSubTotal(rs.getDouble("subTotal"));
+
+                    Producto producto = new Producto();
+
+                    producto.setIdProducto(rs.getInt("idProducto"));
+                    producto.setNombre(rs.getString("nombre"));
+                    producto.setDescripcion(rs.getString("descripcion"));
+                    producto.setPrecio(rs.getDouble("precio"));
+                    producto.setImagen(rs.getString("imagen"));
+
+                    producto.setEstadoProducto(
+                            EstadoProducto.valueOf(
+                                    rs.getString("estadoProducto"))
+                    );
+
+                    detalle.setProducto(producto);
+
+                    detalles.add(detalle);
 
                 }
 
-                detalle.setIngredientes(ingredientes);
-
-                detalles.add(detalle);
+                pe.setDetalles(detalles);
 
             }
 
-            pe.setDetalles(detalles);
+        } catch (Exception e) {
 
-        }
+            System.out.println("Error al buscar pedido " + e.getMessage());
 
-    } catch (Exception e) {
-
-        System.out.println("Error al buscar pedido " + e.getMessage());
-
-        try {
-            cn.rollback();
-        } catch (Exception ex) {
-        }
-
-    } finally {
-
-        if (cn != null) {
             try {
-                cn.close();
+                cn.rollback();
             } catch (Exception ex) {
-                System.out.println("Error al cerrar conexión");
             }
+
+        } finally {
+
+            if (cn != null) {
+                try {
+                    cn.close();
+                } catch (Exception ex) {
+                    System.out.println("Error al cerrar conexión");
+                }
+            }
+
         }
 
-    }
-
-    return pe;
+        return pe;
     }
 
     @Override
