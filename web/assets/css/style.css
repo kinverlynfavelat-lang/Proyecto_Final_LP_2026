@@ -77,21 +77,17 @@ main {
     object-fit: cover;
 }
 
-/* =========================
-   TEXTO
-========================= */
+
 
 .product-card h6{
-    color: #1f1f1f; /* evita rojos raros */
+    color: #1f1f1f; 
 }
 
-/* precio bien alineado a tu marca */
 .product-price{
-    color: #b87900 !important;  /* dorado oscuro bonito */
+    color: #b87900 !important;  
     font-weight: 800;
 }
 
-/* descripción */
 .small-desc{
     font-size: 12px;
     height: 34px;
@@ -119,12 +115,10 @@ main {
 }
 
 
-/*icono carrito*/
 .navbar-custom .bi-cart3 {
     color: #3a2f1a;
     font-size: 1.3rem;
 }
-/*nuestras hamburguesas*/
 h2.fw-bold {
     color: #3a2f1a;
     font-weight: 700;
@@ -179,9 +173,7 @@ h2.fw-bold {
     border-color:#ffc01b;
     box-shadow:0 0 0 .2rem rgba(255,192,27,.25);
 }
-/*=========================
-  TARJETAS DE PAGO
-=========================*/
+
 
 .payment-card{
 
@@ -232,9 +224,6 @@ h2.fw-bold {
     color:#7a6b55;
 }
 
-/*=========================
-  RESUMEN PEDIDO
-=========================*/
 
 .order-summary{
 
@@ -318,9 +307,7 @@ h2.fw-bold {
 
     letter-spacing:2px;
 }
-/*=========================
-  SUBIR COMPROBANTE
-=========================*/
+
 
 .upload-box{
 
@@ -360,9 +347,7 @@ h2.fw-bold {
 
     margin-top:15px;
 }
-/*=========================
-  PEDIDO CONFIRMADO
-=========================*/
+
 
 .success-circle{
 
@@ -410,9 +395,7 @@ h2.fw-bold {
     color:#b87900;
 }
 
-/*=========================
-  TITULO ADMIN
-=========================*/
+
 
 .titulo-admin{
     color:#3a2f1a;
@@ -424,9 +407,6 @@ h2.fw-bold {
     font-size:.95rem;
 }
 
-/*=========================
-  CARD
-=========================*/
 
 .admin-card{
     border:none;
@@ -436,9 +416,6 @@ h2.fw-bold {
     background:#fffdf7;
 }
 
-/*=========================
-  TABLA
-=========================*/
 
 .thead-burger{
     background:#ffefbf;
@@ -451,9 +428,7 @@ h2.fw-bold {
     border-bottom:2px solid #ffd45b;
 }
 
-/*=========================
-  MODAL ADMIN
-=========================*/
+
 
 .modal-burger{
 
@@ -468,7 +443,6 @@ h2.fw-bold {
     font-weight:700;
 }
 
-/* Inputs */
 
 .form-control{
 
@@ -483,7 +457,6 @@ h2.fw-bold {
     box-shadow:0 0 0 .2rem rgba(255,192,27,.2);
 }
 
-/* Input group */
 
 .input-group-text{
 
@@ -496,7 +469,6 @@ h2.fw-bold {
     color:#7a5b00;
 }
 
-/* Botón cancelar */
 
 .btn-burger-outline{
 
@@ -520,9 +492,7 @@ h2.fw-bold {
     color:#3a2f1a;
 }
 
-/*=========================
-  TABLA ADMIN
-=========================*/
+
 
 .fila-producto{
 
@@ -557,9 +527,6 @@ h2.fw-bold {
     font-size:1rem;
 }
 
-/*=========================
-  BADGES
-=========================*/
 
 .badge-activo{
 
@@ -591,9 +558,6 @@ h2.fw-bold {
     font-weight:600;
 }
 
-/*=========================
-  BOTONES
-=========================*/
 
 .btn.btn-editar{
 
@@ -648,9 +612,7 @@ h2.fw-bold {
 
     transform:translateY(-2px);
 }
-/*=========================
-    MÉTODO DE PAGO
-=========================*/
+
 
 .badge-metodo{
 

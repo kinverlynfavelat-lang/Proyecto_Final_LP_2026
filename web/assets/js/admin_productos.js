@@ -1,8 +1,3 @@
-/*
- ====================================
- ADMIN PRODUCTOS
- ====================================
- */
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -134,9 +129,6 @@ fetch("ProductoController?action=listar")
             });
 
 }
-// ======================================
-// EDITAR PRODUCTO
-// ======================================
 
 function editarProducto(idProducto) {
 
@@ -172,9 +164,6 @@ function editarProducto(idProducto) {
 
 }
 
-// ======================================
-// CAMBIAR ESTADO
-// ======================================
 function cambiarEstado(idProducto, estadoActual) {
 
     const nuevoEstado =
@@ -247,9 +236,7 @@ function cambiarEstado(idProducto, estadoActual) {
     });
 
 }
-// ================================
-// ABRIR MODAL NUEVO PRODUCTO
-// ================================
+
 function abrirModalNuevo() {
 
     document.getElementById("formProducto").reset();
@@ -263,9 +250,7 @@ function abrirModalNuevo() {
     $("#modalProducto").modal("show");
 
 }
-// ======================================
-// GUARDAR PRODUCTO
-// ======================================
+// guardar producto
 
 document.getElementById("formProducto").addEventListener("submit", function (e) {
 

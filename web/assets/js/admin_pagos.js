@@ -2,9 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     listarPagos();
 });
 
-// ==========================================
-// LISTAR PAGOS
-// ==========================================
+
 function listarPagos() {
 
     fetch("PagoController?action=listarPagosAdmin")
@@ -133,9 +131,7 @@ function listarPagos() {
 }
 
 
-// ==========================================
-// VER COMPROBANTE
-// ==========================================
+
 function verComprobante(img){
 
     Swal.fire({
@@ -159,9 +155,6 @@ function verComprobante(img){
 }
 
 
-// ==========================================
-// VALIDAR PAGO
-// ==========================================
 function validarPago(idPago, estado){
 
     fetch("PagoController?action=validarPago",{

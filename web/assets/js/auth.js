@@ -1,19 +1,6 @@
-/*
- ==========================================
- AUTH.JS - BURGERBUILDER
- ==========================================
- Login, registro, sesión y logout
- ==========================================
- */
 
-// ==========================
-// INICIALIZAR EVENTOS
-// ==========================
 function inicializarEventosAuth() {
 
-    // ==========================
-    // LOGIN
-    // ==========================
     $(document).on('submit', '#form-login', function (e) {
         e.preventDefault();
 
@@ -28,7 +15,6 @@ function inicializarEventosAuth() {
 
                     if (data.success) {
 
-                        // Guardar usuario en sesión del navegador
                         sessionStorage.setItem("usuario", JSON.stringify(data.userData));
 
                         Swal.fire({
@@ -56,9 +42,7 @@ function inicializarEventosAuth() {
                 .catch(err => console.error("Error login:", err));
     });
 
-    // ==========================
-    // REGISTER
-    // ==========================
+
     $(document).on('submit', '#form-register', function (e) {
         e.preventDefault();
 
@@ -97,9 +81,6 @@ setTimeout(() => {
     });
 }
 
-// ==========================
-// VERIFICAR SESIÓN
-// ==========================
 function verificarSesion() {
 
     const usuario = JSON.parse(sessionStorage.getItem("usuario"));
@@ -134,9 +115,6 @@ function verificarSesion() {
     }
 }
 
-// ==========================
-// LOGOUT
-// ==========================
 function logout() {
 
     fetch('AuthController?action=logout', {method: 'POST'})

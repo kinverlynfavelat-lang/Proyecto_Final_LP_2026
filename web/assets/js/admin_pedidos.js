@@ -2,9 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     listarPedidos();
 });
 
-// =========================
-// LISTAR PEDIDOS
-// =========================
 function listarPedidos() {
 
     fetch("AppController?action=listarPedidosAdmin")
@@ -183,9 +180,7 @@ function listarPedidos() {
         });
 }
 
-// =========================
-// VER DETALLE
-// =========================
+
 function verDetalle(id) {
 
     fetch("AppController?action=detallePedido&idPedido=" + id)
@@ -229,9 +224,6 @@ function verDetalle(id) {
         });
 }
 
-// =========================
-// CAMBIAR ESTADO (PRO)
-// =========================
 function setEstado(idPedido, estado) {
 
     fetch("AppController?action=actualizarEstadoPedido", {

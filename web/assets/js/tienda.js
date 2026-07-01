@@ -282,21 +282,38 @@ function iniciarCompra() {
 function pasarMetodoPago() {
 
     const pedido = {
-        nombre: $('#nombreCliente').val(),
-        dni: $('#dni').val(),
-        telefono: $('#telefono').val(),
-        direccionEntrega: $('#direccion').val()
+        nombre: $('#nombreCliente').val().trim(),
+        dni: $('#dni').val().trim(),
+        telefono: $('#telefono').val().trim(),
+        direccionEntrega: $('#direccion').val().trim()
     };
 
     if (!pedido.nombre || !pedido.dni || !pedido.telefono || !pedido.direccionEntrega) {
-        Swal.fire("Completa todos los campos");
+        Swal.fire("Error", "Completa todos los campos", "warning");
+        return;
+    }
+
+    // Validar DNI
+    if (!/^\d{8}$/.test(pedido.dni)) {
+        Swal.fire("Error", "El DNI debe tener exactamente 8 números.", "error");
+        return;
+    }
+
+    // Validar teléfono
+    if (!/^\d{9}$/.test(pedido.telefono)) {
+        Swal.fire("Error", "El teléfono debe tener exactamente 9 números.", "error");
         return;
     }
 
     sessionStorage.setItem("pedidoTemp", JSON.stringify(pedido));
 
-    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalDatosPedido")).hide();
-    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalMetodoPago")).show();
+    bootstrap.Modal.getOrCreateInstance(
+        document.getElementById("modalDatosPedido")
+    ).hide();
+
+    bootstrap.Modal.getOrCreateInstance(
+        document.getElementById("modalMetodoPago")
+    ).show();
 }
 
 
@@ -345,9 +362,7 @@ function confirmarMetodoPago(metodo) {
             });
 }
 
-// ==========================
-// 4. RESUMEN PEDIDO
-// ==========================
+
 function mostrarResumenPedido(pedidoFinal) {
 
     $('#res-metodo').text(pedidoFinal.metodoPago);
@@ -360,9 +375,6 @@ function mostrarResumenPedido(pedidoFinal) {
 }
 
 
-// ==========================
-// 5. ABRIR COMPROBANTE
-// ==========================
 function abrirModalComprobante() {
 
     bootstrap.Modal.getOrCreateInstance(document.getElementById("modalResumenPedido")).hide();
@@ -370,9 +382,6 @@ function abrirModalComprobante() {
 }
 
 
-// ==========================
-// 6. ENVIAR COMPROBANTE (PagoController)
-// ==========================
 async function enviarComprobante() {
 
     const form = document.getElementById("form-comprobante");
