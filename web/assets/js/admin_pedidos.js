@@ -22,57 +22,158 @@ function listarPedidos() {
             data.data.forEach(p => {
 
                 tbody.innerHTML += `
-                    <tr>
 
-                        <td>${p.codigo}</td>
-                        <td>${p.cliente}</td>
-                        <td>${p.fecha}</td>
-                        <td>${p.metodoPago}</td>
-                        <td>S/ ${p.total}</td>
+<tr class="fila-producto">
 
-                        <td>
-                            <span class="badge 
-                                ${p.estado === 'RECIBIDO' ? 'bg-secondary' :
-                                  p.estado === 'EN_PREPARACION' ? 'bg-warning text-dark' :
-                                  p.estado === 'LISTO' ? 'bg-primary' :
-                                  'bg-success'}">
+    <td>
+        <span class="fw-semibold">
+            ${p.codigo}
+        </span>
+    </td>
 
-                                ${p.estado}
-                            </span>
-                        </td>
+    <td>
 
-                        <td>
+        <div class="fw-semibold">
+            ${p.cliente}
+        </div>
 
-                            <button class="btn btn-primary btn-sm"
-                                onclick="verDetalle(${p.idPedido})">
-                                Ver
-                            </button>
+    </td>
 
-                            <div class="dropdown d-inline">
+    <td>${p.fecha}</td>
 
-                                <button class="btn btn-warning btn-sm dropdown-toggle"
-                                    data-bs-toggle="dropdown">
-                                    Estado
-                                </button>
+    <td>
 
-                                <ul class="dropdown-menu">
+        <span class="badge-metodo">
 
-                                    <li><a class="dropdown-item" onclick="setEstado(${p.idPedido}, 'RECIBIDO')">Recibido</a></li>
+            ${p.metodoPago}
 
-                                    <li><a class="dropdown-item" onclick="setEstado(${p.idPedido}, 'EN_PREPARACION')">En preparación</a></li>
+        </span>
 
-                                    <li><a class="dropdown-item" onclick="setEstado(${p.idPedido}, 'LISTO')">Listo</a></li>
+    </td>
 
-                                    <li><a class="dropdown-item" onclick="setEstado(${p.idPedido}, 'ENTREGADO')">Entregado</a></li>
+    <td>
 
-                                </ul>
+        <span class="precio-admin">
 
-                            </div>
+            S/ ${Number(p.total).toFixed(2)}
 
-                        </td>
+        </span>
 
-                    </tr>
-                `;
+    </td>
+
+    <td>
+
+        <span class="badge ${
+            p.estado === "RECIBIDO"
+                ? "badge-recibido"
+                : p.estado === "EN_PREPARACION"
+                    ? "badge-preparacion"
+                    : p.estado === "LISTO"
+                        ? "badge-listo"
+                        : "badge-entregado"
+        }">
+
+            ${
+                p.estado === "RECIBIDO"
+                    ? "Recibido"
+                    : p.estado === "EN_PREPARACION"
+                        ? "En preparación"
+                        : p.estado === "LISTO"
+                            ? "Listo"
+                            : "Entregado"
+            }
+
+        </span>
+
+    </td>
+
+    <td>
+
+        <div class="d-flex gap-2">
+
+            <button
+                class="btn btn-editar"
+
+                title="Ver detalle"
+
+                onclick="verDetalle(${p.idPedido})">
+
+                <i class="bi bi-eye"></i>
+
+            </button>
+
+            <div class="dropdown">
+
+                <button
+                    class="btn btn-inactivar dropdown-toggle"
+
+                    data-bs-toggle="dropdown">
+
+                    Estado
+
+                </button>
+
+                <ul class="dropdown-menu shadow border-0 rounded-3">
+
+                    <li>
+
+                        <a class="dropdown-item"
+
+                           onclick="setEstado(${p.idPedido},'RECIBIDO')">
+
+                            Recibido
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a class="dropdown-item"
+
+                           onclick="setEstado(${p.idPedido},'EN_PREPARACION')">
+
+                            En preparación
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a class="dropdown-item"
+
+                           onclick="setEstado(${p.idPedido},'LISTO')">
+
+                            Listo
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a class="dropdown-item"
+
+                           onclick="setEstado(${p.idPedido},'ENTREGADO')">
+
+                            Entregado
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </td>
+
+</tr>
+
+`;
             });
 
         })

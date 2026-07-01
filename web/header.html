@@ -2,16 +2,29 @@
     <div class="container">
 
         <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center fw-bold" href="index.html">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
 
-            <!-- Cambia esta imagen por tu logo -->
-            <img src="assets/img/logo.png.png"
-                 alt="BurgerBuilder"
-                 width="120"
-                 class="me-2">
+    <img
+        src="assets/img/logo.png.png"
+        alt="BurgerBuilder"
+        width="110"
+        class="me-3">
 
+    <div>
 
-        </a>
+        
+
+        <small
+            id="panel-admin"
+            class="text-muted d-none">
+
+            Panel Administrativo
+
+        </small>
+
+    </div>
+
+</a>
 
         <!-- Responsive -->
         <button class="navbar-toggler"
@@ -39,8 +52,9 @@
                 </div>-->
 
                 <!-- Total -->
-                <div class="me-4 text-center">
-
+                <div
+                    id="navbar-total"
+                    class="me-4 text-center">
 
                     <strong>
                         Total: <span id="total-carrito">S/ 0.00</span>
@@ -49,8 +63,10 @@
                 </div>
 
                 <!-- Carrito -->
-                <a href="carrito.html"
-                   class="btn btn-outline-dark position-relative me-3">
+                <a
+                    id="navbar-carrito"
+                    href="carrito.html"
+                    class="btn btn-outline-dark position-relative me-3">
 
                     <i class="bi bi-cart3 fs-5"></i>
 
@@ -237,15 +253,15 @@
 
             </form>
 
-            <p class="text-center mt-3 mb-0">
+           <p class="text-center mt-3 mb-0">
 
-                ¿No tienes cuenta?
+    ¿No tienes cuenta?
 
-                <a href="#" data-bs-toggle="modal" data-bs-target="#modalRegister">
-                    Regístrate
-                </a>
+    <a href="#" onclick="abrirRegistro()">
+        Regístrate
+    </a>
 
-            </p>
+</p>
 
         </div>
 

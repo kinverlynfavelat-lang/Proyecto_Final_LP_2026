@@ -36,52 +36,88 @@ fetch("ProductoController?action=listar")
 
                     tbody.innerHTML += `
 
-<tr>
+<tr class="fila-producto">
 
-<td>
-<img src="${producto.imagen}"
-width="70"
-class="rounded shadow">
-</td>
+    <td>
+        <img
+            src="${producto.imagen}"
+            class="img-admin-producto">
+    </td>
 
-<td>${producto.nombre}</td>
+    <td>
 
-<td>${producto.descripcion}</td>
+        <div class="fw-semibold">
+            ${producto.nombre}
+        </div>
 
-<td>S/ ${producto.precio}</td>
+    </td>
 
-<td>
+    <td class="text-muted">
 
-<span class="badge bg-${producto.estadoProducto === 'ACTIVO' ? 'success' : 'secondary'}">
+        ${producto.descripcion}
 
-${producto.estadoProducto}
+    </td>
 
-</span>
+    <td>
 
-</td>
+        <span class="precio-admin">
+            S/ ${Number(producto.precio).toFixed(2)}
+        </span>
 
-<td>
+    </td>
 
-<button
-class="btn btn-warning btn-sm"
-onclick="editarProducto(${producto.idProducto})">
+    <td>
 
-Editar
+        <span class="badge ${
+            producto.estadoProducto === "ACTIVO"
+                ? "badge-activo"
+                : "badge-inactivo"
+        }">
 
-</button>
+            ${
+                producto.estadoProducto === "ACTIVO"
+                    ? "● Activo"
+                    : "● Inactivo"
+            }
 
-<button
-class="btn btn-${producto.estadoProducto === 'ACTIVO' ? 'danger' : 'success'} btn-sm"
+        </span>
 
-onclick="cambiarEstado(${producto.idProducto}, '${producto.estadoProducto}')">
+    </td>
 
-${producto.estadoProducto === 'ACTIVO'
-                            ? 'Inactivar'
-                            : 'Activar'}
+    <td>
 
-</button>
+        <div class="d-flex gap-2">
 
-</td>
+            <button
+                class="btn btn-editar"
+
+                onclick="editarProducto(${producto.idProducto})">
+
+                <i class="bi bi-pencil-square"></i>
+
+            </button>
+
+            <button
+
+                class="btn ${
+                    producto.estadoProducto === "ACTIVO"
+                        ? "btn-inactivar"
+                        : "btn-activar"
+                }"
+
+                onclick="cambiarEstado(${producto.idProducto}, '${producto.estadoProducto}')">
+
+                <i class="bi ${
+                    producto.estadoProducto === "ACTIVO"
+                        ? "bi-eye-slash"
+                        : "bi-eye"
+                }"></i>
+
+            </button>
+
+        </div>
+
+    </td>
 
 </tr>
 

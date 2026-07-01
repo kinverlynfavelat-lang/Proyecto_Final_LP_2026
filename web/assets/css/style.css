@@ -14,6 +14,10 @@ header {
 /* COMPENSAR HEADER */
 body {
     padding-top: var(--header-height);
+     color: #3a2f1a;
+}
+.text-muted {
+    color: #6b5a3a !important;
 }
 
 /* NAVBAR */
@@ -112,4 +116,659 @@ main {
 .navbar.navbar-custom {
     background-color: #ffefbf !important;
     border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+
+/*icono carrito*/
+.navbar-custom .bi-cart3 {
+    color: #3a2f1a;
+    font-size: 1.3rem;
+}
+/*nuestras hamburguesas*/
+h2.fw-bold {
+    color: #3a2f1a;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+
+.thead-burger {
+    background: #e9d3a3; /* tu base del navbar */
+    color: #3a2f1a;
+}
+
+.btn-trash {
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-burger {
+    background: #e9d3a3;
+    color: #3a2f1a;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn-burger:hover {
+    background: #e9d3a3;
+    transform: translateY(-2px);
+}
+.modal-content{
+    border-radius:20px;
+}
+
+.input-group-text{
+    background:#ffefbf;
+    border:1px solid #ffe08a;
+    color:#8a5b00;
+}
+
+.form-control{
+    border-radius:10px;
+    padding:12px;
+}
+
+.form-control:focus{
+    border-color:#ffc01b;
+    box-shadow:0 0 0 .2rem rgba(255,192,27,.25);
+}
+/*=========================
+  TARJETAS DE PAGO
+=========================*/
+
+.payment-card{
+
+    background:#fff;
+
+    border:2px solid #ffe08a;
+
+    border-radius:18px;
+
+    padding:25px 15px;
+
+    cursor:pointer;
+
+    transition:.30s;
+
+    text-align:center;
+}
+
+.payment-card:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#ffc01b;
+
+    box-shadow:0 12px 25px rgba(0,0,0,.12);
+
+    background:#fffdf6;
+}
+
+.payment-logo{
+
+    width:75px;
+
+    height:75px;
+
+    object-fit:contain;
+}
+
+.payment-card h5{
+
+    color:#3a2f1a;
+
+    font-weight:700;
+}
+
+.payment-card small{
+
+    color:#7a6b55;
+}
+
+/*=========================
+  RESUMEN PEDIDO
+=========================*/
+
+.order-summary{
+
+    background:#fffdf6;
+
+    border:2px solid #ffe08a;
+
+    border-radius:18px;
+
+    padding:20px;
+}
+
+.summary-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #f1e3b5;
+}
+
+.summary-item:last-child{
+
+    border-bottom:none;
+}
+
+.summary-item span{
+
+    color:#6b5a3a;
+}
+
+.summary-item strong{
+
+    color:#3a2f1a;
+
+    font-size:17px;
+}
+
+.total-item strong{
+
+    color:#b87900;
+
+    font-size:22px;
+}
+
+.payment-info{
+
+    text-align:center;
+}
+
+.payment-logo-big{
+
+    width:95px;
+
+    height:95px;
+
+    object-fit:contain;
+}
+
+.payment-number{
+
+    display:inline-block;
+
+    background:#fff8dc;
+
+    border:2px dashed #ffc01b;
+
+    border-radius:12px;
+
+    padding:12px 28px;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#3a2f1a;
+
+    letter-spacing:2px;
+}
+/*=========================
+  SUBIR COMPROBANTE
+=========================*/
+
+.upload-box{
+
+    border:2px dashed #ffc01b;
+
+    background:#fffdf6;
+
+    border-radius:18px;
+
+    padding:35px 25px;
+
+    text-align:center;
+
+    transition:.3s;
+}
+
+.upload-box:hover{
+
+    background:#fff8ea;
+
+    border-color:#d89a00;
+}
+
+.upload-box i{
+
+    color:#b87900;
+}
+
+.upload-box h5{
+
+    color:#3a2f1a;
+
+    font-weight:700;
+}
+
+.upload-box input{
+
+    margin-top:15px;
+}
+/*=========================
+  PEDIDO CONFIRMADO
+=========================*/
+
+.success-circle{
+
+    width:110px;
+
+    height:110px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#fff8dc;
+
+    border:3px solid #ffc01b;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.success-circle i{
+
+    font-size:55px;
+
+    color:#b87900;
+}
+
+.confirmation-box{
+
+    background:#fffdf6;
+
+    border:2px solid #ffe08a;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    color:#5c4a2a;
+}
+
+.confirmation-box i{
+
+    color:#b87900;
+}
+
+/*=========================
+  TITULO ADMIN
+=========================*/
+
+.titulo-admin{
+    color:#3a2f1a;
+    font-weight:700;
+}
+
+.text-admin{
+    color:#7a6950;
+    font-size:.95rem;
+}
+
+/*=========================
+  CARD
+=========================*/
+
+.admin-card{
+    border:none;
+    border-radius:18px;
+    overflow:hidden;
+    border:2px solid #ffe08a;
+    background:#fffdf7;
+}
+
+/*=========================
+  TABLA
+=========================*/
+
+.thead-burger{
+    background:#ffefbf;
+}
+
+.thead-burger th{
+    background:#ffefbf;
+    color:#3a2f1a;
+    font-weight:700;
+    border-bottom:2px solid #ffd45b;
+}
+
+/*=========================
+  MODAL ADMIN
+=========================*/
+
+.modal-burger{
+
+    background:#ffefbf;
+
+    color:#3a2f1a;
+
+    border-bottom:1px solid #f3d986;
+}
+
+.modal-burger h4{
+    font-weight:700;
+}
+
+/* Inputs */
+
+.form-control{
+
+    border-radius:12px;
+    border:1px solid #e5d7b0;
+}
+
+.form-control:focus{
+
+    border-color:#ffc01b;
+
+    box-shadow:0 0 0 .2rem rgba(255,192,27,.2);
+}
+
+/* Input group */
+
+.input-group-text{
+
+    background:#fff7df;
+
+    border-color:#e5d7b0;
+
+    font-weight:700;
+
+    color:#7a5b00;
+}
+
+/* Botón cancelar */
+
+.btn-burger-outline{
+
+    background:#fff;
+
+    color:#7b6b52;
+
+    border:2px solid #e8d7ab;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+    transition:.25s;
+}
+
+.btn-burger-outline:hover{
+
+    background:#f7f2e6;
+
+    color:#3a2f1a;
+}
+
+/*=========================
+  TABLA ADMIN
+=========================*/
+
+.fila-producto{
+
+    transition:.25s;
+}
+
+.fila-producto:hover{
+
+    background:#fffaf0;
+}
+
+.img-admin-producto{
+
+    width:75px;
+    height:75px;
+
+    object-fit:cover;
+
+    border-radius:14px;
+
+    border:2px solid #ffe08a;
+
+    box-shadow:0 5px 12px rgba(0,0,0,.08);
+}
+
+.precio-admin{
+
+    color:#b87900;
+
+    font-weight:700;
+
+    font-size:1rem;
+}
+
+/*=========================
+  BADGES
+=========================*/
+
+.badge-activo{
+
+    background:#edf8e8;
+
+    color:#3d7b32;
+
+    border:1px solid #b7dfaa;
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    font-weight:600;
+}
+
+.badge-inactivo{
+
+    background:#f5f5f5;
+
+    color:#7b7b7b;
+
+    border:1px solid #dddddd;
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    font-weight:600;
+}
+
+/*=========================
+  BOTONES
+=========================*/
+
+.btn.btn-editar{
+
+    background:#ffc01b !important;
+    color:#3a2f1a !important;
+    border:none !important;
+
+    width:40px;
+    height:40px;
+
+    border-radius:10px;
+}
+
+.btn.btn-editar:hover{
+
+    background:#ffcf45 !important;
+}
+
+.btn.btn-inactivar{
+
+    background:#ffe6c7 !important;
+
+    color:#b25a00 !important;
+
+    border:none !important;
+}
+
+.btn.btn-inactivar:hover{
+
+    background:#ffd39d !important;
+}
+
+.btn-activar{
+
+    background:#eef8e9;
+
+    color:#3f7c35;
+
+    border:none;
+
+    border-radius:10px;
+
+    width:40px;
+    height:40px;
+
+    transition:.25s;
+}
+
+.btn-activar:hover{
+
+    background:#cdeabf;
+
+    transform:translateY(-2px);
+}
+/*=========================
+    MÉTODO DE PAGO
+=========================*/
+
+.badge-metodo{
+
+    background:#fff4d4;
+
+    color:#8a6300;
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    font-weight:600;
+}
+
+/*=========================
+    ESTADOS
+=========================*/
+
+.badge-recibido{
+
+    background:#f0f0f0;
+
+    color:#666;
+
+    border:1px solid #ddd;
+}
+
+.badge-preparacion{
+
+    background:#fff5d8;
+
+    color:#9b6a00;
+
+    border:1px solid #ffd970;
+}
+
+.badge-listo{
+
+    background:#e7f4ff;
+
+    color:#0b5fa5;
+
+    border:1px solid #a9d3ff;
+}
+
+.badge-entregado{
+
+    background:#edf8e8;
+
+    color:#3d7b32;
+
+    border:1px solid #b7dfaa;
+}
+
+.badge-recibido,
+.badge-preparacion,
+.badge-listo,
+.badge-entregado{
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    font-weight:600;
+}
+
+/* Botón Aprobar */
+
+.btn-burger-success{
+
+    background:#50933a;
+    color:#3a2f1a;
+    border:none;
+    font-weight:600;
+}
+
+.btn-burger-success:hover{
+
+    background:#ffefbf;
+}
+
+
+/* Botón Rechazar */
+
+.btn-burger-danger{
+
+    background:#f05633;
+    color:white;
+    border:none;
+    font-weight:600;
+}
+
+.btn-burger-danger:hover{
+
+    background:#6f4528;
+}
+
+.text-burger-title{
+    color:#3a2f1a;
+}
+
+.thead-burger{
+    background:#efe4cf;
+}
+
+.thead-burger th{
+    color:#4d3b22;
+    font-weight:700;
+    border-bottom:2px solid #d7c4a4;
+}
+
+.card{
+    border-radius:18px !important;
+}
+
+#panel-admin{
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #6b4a2a !important;
+    letter-spacing: 0.5px;
 }

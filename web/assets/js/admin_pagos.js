@@ -2,118 +2,206 @@ document.addEventListener("DOMContentLoaded", () => {
     listarPagos();
 });
 
-// =========================
+// ==========================================
 // LISTAR PAGOS
-// =========================
+// ==========================================
 function listarPagos() {
 
     fetch("PagoController?action=listarPagosAdmin")
-            .then(res => res.json())
-            .then(data => {
+        .then(res => res.json())
+        .then(data => {
 
-                const tbody = document.querySelector("#tabla-pagos tbody");
-                tbody.innerHTML = "";
+            if (!data.success) {
+                Swal.fire("Error", data.message, "error");
+                return;
+            }
 
-                if (!data.success) {
-                    Swal.fire("Error", data.message, "error");
-                    return;
+            const tbody = document.querySelector("#tabla-pagos tbody");
+            tbody.innerHTML = "";
+
+            data.data.forEach(p => {
+
+                let badge = "";
+
+                switch (p.estadoPago) {
+
+                    case "PENDIENTE":
+                        badge = `
+                        <span class="badge rounded-pill"
+                              style="
+                                background:#fff4d4;
+                                color:#8a6500;
+                                border:1px solid #ffd35a;
+                              ">
+                            Pendiente
+                        </span>`;
+                        break;
+
+                    case "VALIDADO":
+                        badge = `
+                        <span class="badge rounded-pill"
+                              style="
+                                background:#e9f8e7;
+                                color:#2f6d2f;
+                                border:1px solid #8bc98b;
+                              ">
+                            Validado
+                        </span>`;
+                        break;
+
+                    default:
+                        badge = `
+                        <span class="badge rounded-pill"
+                              style="
+                                background:#fdeaea;
+                                color:#b43b3b;
+                                border:1px solid #f3a4a4;
+                              ">
+                            Rechazado
+                        </span>`;
                 }
 
-                data.data.forEach(p => {
+                tbody.innerHTML += `
 
-                    tbody.innerHTML += `
-                    <tr>
+                <tr>
 
-                        <td>${p.idPedido}</td>
-                        <td>${p.metodo}</td>
+                    <td><b>#${p.idPedido}</b></td>
 
-                        <td>
-                            <span class="badge 
-                                ${p.estadoPago === 'PENDIENTE' ? 'bg-warning text-dark' :
-                            p.estadoPago === 'VALIDADO' ? 'bg-success' :
-                            'bg-danger'}">
+                    <td>${p.metodo}</td>
 
-                                ${p.estadoPago}
+                    <td>${badge}</td>
 
-                            </span>
-                        </td>
+                    <td>${p.fechaPago || "-"}</td>
 
-                        <td>${p.fechaPago || ''}</td>
+                    <td>
 
-                        <td>
-                            <img src="${p.comprobante}"
-     width="70"
-     class="rounded shadow"
-     style="cursor:pointer"
-     onclick="verComprobante('${p.comprobante}')">
-                        </td>
+                        <img
+                            src="${p.comprobante}"
+                            width="75"
+                            class="rounded shadow-sm"
+                            style="
+                                cursor:pointer;
+                                border:2px solid #ffe7a4;
+                                transition:.25s;
+                            "
+                            onclick="verComprobante('${p.comprobante}')">
 
-                        <td>
+                    </td>
 
-                            <button class="btn btn-success btn-sm"
-                                onclick="validarPago(${p.idPago}, 'VALIDADO')">
-                                Aprobar
-                            </button>
+                    <td>
 
-                            <button class="btn btn-danger btn-sm"
-                                onclick="validarPago(${p.idPago}, 'RECHAZADO')">
-                                Rechazar
-                            </button>
+                        <button
+                            class="btn btn-burger-success btn-sm me-2"
+                            onclick="validarPago(${p.idPago}, 'VALIDADO')">
 
-                        </td>
+                            <i "></i>
+                            Aprobar
 
-                    </tr>
+                        </button>
+
+                        <button
+                            class="btn btn-burger-danger btn-sm"
+                            onclick="validarPago(${p.idPago}, 'RECHAZADO')">
+
+                            <i "></i>
+                            Rechazar
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
                 `;
-                });
 
             });
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            Swal.fire(
+                "Error",
+                "No fue posible cargar los pagos.",
+                "error"
+            );
+
+        });
+
 }
 
-// =========================
-// VER IMAGEN
-// =========================
-function verComprobante(img) {
+
+// ==========================================
+// VER COMPROBANTE
+// ==========================================
+function verComprobante(img){
 
     Swal.fire({
-        imageUrl: img,
-        imageWidth: 400,
-        imageAlt: "Comprobante"
+
+        title:"Comprobante de pago",
+
+        imageUrl:img,
+
+        imageWidth:450,
+
+        imageAlt:"Comprobante",
+
+        background:"#fffdf8",
+
+        confirmButtonColor:"#ffc01b",
+
+        confirmButtonText:"Cerrar"
+
     });
 
 }
 
-// =========================
+
+// ==========================================
 // VALIDAR PAGO
-// =========================
-function validarPago(idPago, estado) {
+// ==========================================
+function validarPago(idPago, estado){
 
-    fetch("PagoController?action=validarPago", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+    fetch("PagoController?action=validarPago",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
         },
-        body: `idPago=${idPago}&estado=${estado}`
-    })
-            .then(res => res.json())
-            .then(data => {
 
-                if (data.success) {
-                    Swal.fire("Correcto", "Pago actualizado", "success");
-                    listarPagos();
-                } else {
-                    Swal.fire("Error", data.message, "error");
-                }
+        body:`idPago=${idPago}&estado=${estado}`
+
+    })
+
+    .then(res=>res.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            Swal.fire({
+
+                icon:"success",
+
+                title:"Pago actualizado",
+
+                text:`Estado: ${estado}`,
+
+                confirmButtonColor:"#ffc01b"
 
             });
 
-}
-function verComprobante(img) {
+            listarPagos();
 
-    Swal.fire({
-        imageUrl: img,
-        imageWidth: 500,
-        imageHeight: 600,
-        showConfirmButton: false
+        }else{
+
+            Swal.fire("Error",data.message,"error");
+
+        }
+
     });
 
 }

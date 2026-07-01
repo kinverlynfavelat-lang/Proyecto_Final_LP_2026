@@ -1,114 +1,157 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Carrito - BurgerBuilder</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>Carrito - BurgerBuilder</title>
     <div id="head-placeholder"></div>
 </head>
 
 <body>
 
-<header id="header-placeholder"></header>
+    <header id="header-placeholder"></header>
 
-<main class="container py-5">
+    <main class="container py-5">
 
-    <h2 class="fw-bold mb-4">Tu Carrito</h2>
+        <a href="index.html" class="btn">
+            Volver al menú
+        </a>
 
-    <div class="table-responsive">
-        <table class="table align-middle" id="tabla-carrito">
+        <h2 class="fw-bold" style="color:#3a2f1a;">
+            Tu Carrito
+        </h2>
 
-            <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Producto</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Subtotal</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
+        <div class="table-responsive">
+            <table class="table align-middle" id="tabla-carrito">
 
-            <tbody></tbody>
-        </table>
-    </div>
+                <thead class="thead-burger text-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
 
-    <div class="row justify-content-end mt-4">
-        <div class="col-md-4">
+                <tbody></tbody>
+            </table>
+        </div>
 
-            <div class="card shadow-sm p-3">
+        <div class="row justify-content-end mt-4">
+            <div class="col-md-4">
 
-                <h5 class="fw-bold">Resumen</h5>
-                <hr>
+                <div class="card shadow-sm p-3">
 
-                <div class="d-flex justify-content-between">
-                    <span>Total:</span>
-                    <span class="fw-bold" id="total-carrito">S/ 0.00</span>
+                    <h5 class="fw-bold">Resumen</h5>
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <span>Total:</span>
+                        <span class="fw-bold" id="total-carrito">S/ 0.00</span>
+                    </div>
+
+                    <button class="btn btn-burger w-100 mt-3" onclick="iniciarCompra()">
+                        Finalizar compra
+                    </button
+
                 </div>
-
-                <button class="btn btn-success w-100 mt-3" onclick="iniciarCompra()">
-                    Finalizar compra
-                </button>
-
             </div>
         </div>
-    </div>
 
-</main>
+    </main>
 
-<footer id="footer-placeholder"></footer>
+    <footer id="footer-placeholder"></footer>
 
-<script src="assets/js/main.js"></script>
-<script src="assets/js/carrito.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/carrito.js"></script>
 
 </body>
 <div class="modal fade" id="modalDatosPedido">
 
     <div class="modal-dialog modal-dialog-centered">
 
-        <div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
 
-            <div class="modal-header bg-warning">
+            <div class="text-center pt-4">
 
-                <h4 class="fw-bold mb-0">
+                <img src="assets/img/logo.png.png"
+                     width="90"
+                     class="mb-3">
+
+                <h3 class="fw-bold mb-1">
                     Datos de entrega
-                </h4>
+                </h3>
 
-                <button class="btn-close"
-                        data-bs-dismiss="modal">
-                </button>
-
-            </div>
-
-            <div class="modal-body p-4">
-
-                <input id="nombreCliente"
-                       class="form-control mb-3"
-                       placeholder="Nombre completo">
-
-                <input id="dni"
-                       class="form-control mb-3"
-                       placeholder="DNI">
-
-                <input id="telefono"
-                       class="form-control mb-3"
-                       placeholder="Teléfono">
-
-                <textarea
-                    id="direccion"
-                    class="form-control"
-                    rows="3"
-                    placeholder="Dirección de entrega"></textarea>
+                <p class="text-muted">
+                    Completa la información para continuar tu pedido.
+                </p>
 
             </div>
 
-            <div class="modal-footer">
+            <div class="modal-body px-4 pb-4">
+
+                <div class="input-group mb-3">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-person-fill"></i>
+                    </span>
+
+                    <input
+                        id="nombreCliente"
+                        class="form-control"
+                        placeholder="Nombre completo">
+
+                </div>
+
+                <div class="input-group mb-3">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-person-vcard-fill"></i>
+                    </span>
+
+                    <input
+                        id="dni"
+                        class="form-control"
+                        placeholder="DNI">
+
+                </div>
+
+                <div class="input-group mb-3">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-telephone-fill"></i>
+                    </span>
+
+                    <input
+                        id="telefono"
+                        class="form-control"
+                        placeholder="Teléfono">
+
+                </div>
+
+                <div class="input-group mb-4">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-geo-alt-fill"></i>
+                    </span>
+
+                    <textarea
+                        id="direccion"
+                        class="form-control"
+                        rows="3"
+                        placeholder="Dirección de entrega"></textarea>
+
+                </div>
 
                 <button
-                    class="btn btn-warning w-100 fw-bold"
+                    class="btn btn-burger w-100 py-3 fw-bold"
                     onclick="pasarMetodoPago()">
 
-                    Continuar →
+                    Continuar
+
+                    <i class="bi bi-arrow-right-circle ms-2"></i>
 
                 </button>
 
@@ -123,243 +166,343 @@
 
 <div class="modal fade" id="modalMetodoPago">
 
-<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered">
 
-<div class="modal-content border-0 shadow rounded-4">
+        <div class="modal-content border-0 shadow-lg rounded-4">
 
-<div class="modal-header">
+            <div class="modal-header justify-content-center border-0 pt-4">
 
-<h4 class="fw-bold">
-Selecciona un método de pago
-</h4>
+                <div class="text-center">
 
-</div>
+                    <h3 class="fw-bold mb-1" style="color:#3a2f1a;">
+                        Método de pago
+                    </h3>
 
-<div class="modal-body">
+                    <p class="text-muted mb-0">
+                        Elige cómo deseas realizar tu pago
+                    </p>
 
-<div class="row g-3">
+                </div>
 
-<div class="col-6">
+                <button class="btn-close position-absolute end-0 me-3"
+                        data-bs-dismiss="modal">
+                </button>
 
-<button
-class="btn btn-outline-success w-100 py-4"
-onclick="confirmarMetodoPago('YAPE')">
+            </div>
 
-<img src="assets/img/yape.png"
-width="70"
-class="mb-2">
+            <div class="modal-body px-4 pb-4">
 
-<br>
+                <div class="row g-4">
 
-<b>Yape</b>
+                    <!-- YAPE -->
+                    <div class="col-6">
 
-</button>
+                        <button
+                            class="payment-card w-100"
+                            onclick="confirmarMetodoPago('YAPE')">
 
-</div>
+                            <img src="assets/img/yape.png"
+                                 class="payment-logo">
 
-<div class="col-6">
+                            <h5 class="mt-3 mb-1">
+                                Yape
+                            </h5>
 
-<button
-class="btn btn-outline-primary w-100 py-4"
-onclick="confirmarMetodoPago('PLIN')">
+                            <small>
+                                Pago inmediato
+                            </small>
 
-<img src="assets/img/plin.png"
-width="70"
-class="mb-2">
+                        </button>
 
-<br>
+                    </div>
 
-<b>Plin</b>
+                    <!-- PLIN -->
+                    <div class="col-6">
 
-</button>
+                        <button
+                            class="payment-card w-100"
+                            onclick="confirmarMetodoPago('PLIN')">
 
-</div>
+                            <img src="assets/img/plin.png"
+                                 class="payment-logo">
 
-</div>
+                            <h5 class="mt-3 mb-1">
+                                Plin
+                            </h5>
 
-</div>
+                            <small>
+                                Pago inmediato
+                            </small>
 
-</div>
+                        </button>
 
-</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
 
 <div class="modal fade" id="modalResumenPedido">
 
-<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered">
 
-<div class="modal-content border-0 shadow-lg rounded-4">
+        <div class="modal-content border-0 shadow-lg rounded-4">
 
-<div class="modal-header bg-success text-white">
+            <div class="modal-header border-0 justify-content-center pt-4">
 
-<h4 class="fw-bold">
+                <div class="text-center">
 
-Resumen del pedido
+                    <h3 class="fw-bold mb-1" style="color:#3a2f1a;">
+                        Resumen de tu pedido
+                    </h3>
 
-</h4>
+                    <p class="text-muted mb-0">
+                        Ya casi terminamos 🍔
+                    </p>
 
-</div>
+                </div>
 
-<div class="modal-body text-center">
+                <button class="btn-close position-absolute end-0 me-3"
+                        data-bs-dismiss="modal">
+                </button>
 
-<h2 id="res-codigo"></h2>
+            </div>
 
-<hr>
+            <div class="modal-body px-4 pb-4">
 
-<p>
+                <div class="order-summary">
 
-Método de pago
+                    <div class="summary-item">
+                        <span>Código</span>
+                        <strong id="res-codigo"></strong>
+                    </div>
 
-</p>
+                    <div class="summary-item">
+                        <span>Método de pago</span>
+                        <strong id="res-metodo"></strong>
+                    </div>
 
-<h4 id="res-metodo"></h4>
+                    <div class="summary-item total-item">
+                        <span>Total</span>
+                        <strong id="res-total"></strong>
+                    </div>
 
-<hr>
+                </div>
 
-<h3 id="res-total"></h3>
+                <div class="payment-info mt-4">
 
-<hr>
+                    
 
-<img
-src="assets/img/yape.png"
-width="120"
-class="mb-3">
+                    <h5 class="mt-3 mb-2"
+                        style="color:#3a2f1a;">
+                        Número para realizar el pago
+                    </h5>
 
-<p class="fw-bold">
+                    <div class="payment-number">
 
-935 715 194
+                        935 715 194
 
-</p>
+                    </div>
 
-<p class="text-muted">
+                    <p class="text-muted mt-3 mb-0">
 
-Realiza el pago y luego sube el comprobante.
+                        Una vez realizado el pago, continúa subiendo tu comprobante para validar tu pedido.
 
-</p>
+                    </p>
 
-<button
-class="btn btn-success w-100"
-onclick="abrirModalComprobante()">
+                </div>
 
-Subir comprobante
+            </div>
 
-</button>
+            <div class="modal-footer border-0 px-4 pb-4">
 
-</div>
+                <button
+                    class="btn add-btn w-100 py-3"
+                    onclick="abrirModalComprobante()">
 
-</div>
+                    Continuar y subir comprobante
 
-</div>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
 
 <div class="modal fade" id="modalComprobante">
 
-<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered">
 
-<div class="modal-content border-0 shadow rounded-4">
+        <div class="modal-content border-0 shadow-lg rounded-4">
 
-<div class="modal-header">
+            <div class="modal-header border-0 justify-content-center pt-4">
 
-<h4>Enviar comprobante</h4>
+                <div class="text-center">
 
-</div>
+                    <h3 class="fw-bold mb-1" style="color:#3a2f1a;">
+                        Subir comprobante
+                    </h3>
 
-<div class="modal-body">
+                    <p class="text-muted mb-0">
+                        Adjunta una captura o foto de tu pago.
+                    </p>
 
-<form id="form-comprobante">
+                </div>
 
-<input
-type="file"
-name="comprobante"
-class="form-control mb-4">
+                <button class="btn-close position-absolute end-0 me-3"
+                        data-bs-dismiss="modal">
+                </button>
 
-<button
-type="button"
-class="btn btn-primary w-100"
-onclick="enviarComprobante()">
+            </div>
 
-Enviar comprobante
+            <div class="modal-body px-4 pb-4">
 
-</button>
+                <form id="form-comprobante">
 
-</form>
+                    <div class="upload-box">
 
-</div>
+                        <i class="bi bi-cloud-arrow-up fs-1 mb-3"></i>
 
-</div>
+                        <h5 class="mb-2">
+                            Selecciona tu comprobante
+                        </h5>
 
-</div>
+                        <p class="text-muted mb-3">
+                            Formatos permitidos: PNG
+                        </p>
+
+                        <input
+                            type="file"
+                            name="comprobante"
+                            class="form-control"
+                            accept=".jpg,.jpeg,.png,.pdf">
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn add-btn w-100 py-3 mt-4"
+                        onclick="enviarComprobante()">
+
+                        <i class="bi bi-send-check me-2"></i>
+
+                        Enviar comprobante
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
 
 <div class="modal fade" id="modalFinal">
 
-<div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered">
 
-<div class="modal-content border-0 shadow-lg rounded-4 text-center p-5">
+        <div class="modal-content border-0 shadow-lg rounded-4">
 
-<div style="font-size:70px">
+            <div class="modal-body text-center p-5">
 
-✅
+                <!-- Icono -->
+                <div class="success-circle mb-4">
+
+                    <i class="bi bi-check-lg"></i>
+
+                </div>
+
+                <h2 class="fw-bold mb-2" style="color:#3a2f1a;">
+
+                    ¡Pedido registrado!
+
+                </h2>
+
+                <p class="text-muted mb-4">
+
+                    Gracias por elegir <strong>BurgerBuilder</strong>.
+                    Hemos recibido tu pedido correctamente.
+
+                </p>
+
+                <!-- Resumen -->
+
+                <div class="order-summary">
+
+                    <div class="summary-item">
+
+                        <span>Código</span>
+
+                        <strong id="final-codigo"></strong>
+
+                    </div>
+
+                    <div class="summary-item">
+
+                        <span>Método de pago</span>
+
+                        <strong id="final-metodo"></strong>
+
+                    </div>
+
+                    <div class="summary-item total-item">
+
+                        <span>Total</span>
+
+                        <strong id="final-total"></strong>
+
+                    </div>
+
+                </div>
+
+                <!-- Mensaje -->
+
+                <div class="confirmation-box mt-4">
+
+                    <i class="bi bi-clock-history fs-4 mb-2"></i>
+
+                    <p class="mb-0">
+
+                        Tu comprobante será revisado por nuestro equipo.
+                        Una vez aprobado, comenzaremos la preparación de tu pedido.
+
+                    </p>
+
+                </div>
+
+                <!-- Botón -->
+
+                <button
+                    class="btn add-btn w-100 py-3 mt-4"
+                    onclick="volverAlMenu()">
+
+                    <i class="bi bi-house-door me-2"></i>
+
+                    Volver al menú
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
-<h2 class="fw-bold mt-3">
-
-¡Pedido registrado!
-
-</h2>
-
-<p>
-
-Código
-
-</p>
-
-<h3 id="final-codigo"></h3>
-
-<p>
-
-Método
-
-</p>
-
-<h5 id="final-metodo"></h5>
-
-<p>
-
-Total
-
-</p>
-
-<h3 id="final-total"></h3>
-
-<div class="alert alert-warning mt-4">
-
-Tu pedido fue registrado correctamente.
-
-Esperaremos la validación del pago para comenzar su preparación.
-
-</div>
-
-<button
-class="btn btn-success btn-lg w-100"
-onclick="volverAlMenu()">
-
-Volver al menú
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
 </html>

@@ -78,9 +78,14 @@ function inicializarEventosAuth() {
                             title: 'Registro exitoso',
                             text: 'Ahora puedes iniciar sesión'
                         }).then(() => {
+                            const loginEl = document.getElementById("modalLogin");
+const registerEl = document.getElementById("modalRegister");
 
-                            $('#modalRegister').modal('hide');
-                            $('#modalLogin').modal('show');
+bootstrap.Modal.getOrCreateInstance(registerEl).hide();
+
+setTimeout(() => {
+    bootstrap.Modal.getOrCreateInstance(loginEl).show();
+}, 200);
 
                         });
 
@@ -111,17 +116,22 @@ function verificarSesion() {
         nombre.textContent = usuario.nombreCompleto;
     }
 
-    // Mostrar menú admin si aplica
-    // Mostrar menú admin si aplica
+  
     if (usuario.rol === "ADMIN") {
 
-    document.getElementById("link-admin-productos")?.classList.remove("d-none");
-    document.getElementById("link-admin-pedidos")?.classList.remove("d-none");
-    document.getElementById("link-admin-pagos")?.classList.remove("d-none");
-    document.getElementById("separator-admin")?.classList.remove("d-none");
+        document.getElementById("link-admin-productos")?.classList.remove("d-none");
+        document.getElementById("link-admin-pedidos")?.classList.remove("d-none");
+        document.getElementById("link-admin-pagos")?.classList.remove("d-none");
+        document.getElementById("separator-admin")?.classList.remove("d-none");
 
-    document.getElementById("link-mis-pedidos")?.classList.add("d-none");
-}
+        document.getElementById("link-mis-pedidos")?.classList.add("d-none");
+
+        document.getElementById("navbar-total")?.classList.add("d-none");
+
+        document.getElementById("navbar-carrito")?.classList.add("d-none");
+        
+        document.getElementById("panel-admin")?.classList.remove("d-none");
+    }
 }
 
 // ==========================
@@ -137,4 +147,41 @@ function logout() {
 
             })
             .catch(err => console.error("Error logout:", err));
+}
+function abrirRegistro() {
+
+    const loginEl = document.getElementById("modalLogin");
+    const registerEl = document.getElementById("modalRegister");
+
+    const login = bootstrap.Modal.getInstance(loginEl);
+
+    if (!login) {
+        bootstrap.Modal.getOrCreateInstance(registerEl).show();
+        return;
+    }
+
+    login.hide();
+
+    loginEl.addEventListener("hidden.bs.modal", () => {
+        bootstrap.Modal.getOrCreateInstance(registerEl).show();
+    }, { once: true });
+}
+
+function abrirLogin() {
+
+    const registerEl = document.getElementById("modalRegister");
+    const loginEl = document.getElementById("modalLogin");
+
+    const register = bootstrap.Modal.getInstance(registerEl);
+
+    if (!register) {
+        bootstrap.Modal.getOrCreateInstance(loginEl).show();
+        return;
+    }
+
+    register.hide();
+
+    registerEl.addEventListener("hidden.bs.modal", () => {
+        bootstrap.Modal.getOrCreateInstance(loginEl).show();
+    }, { once: true });
 }

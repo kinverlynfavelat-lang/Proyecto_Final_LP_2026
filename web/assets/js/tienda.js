@@ -1,7 +1,5 @@
 
-// ==========================
-// CARGAR PRODUCTOS
-// ==========================
+
 async function cargarProductos() {
 
     const contenedor = document.getElementById("lista-productos");
@@ -74,9 +72,6 @@ async function cargarProductos() {
 }
 
 
-// ==========================
-// AGREGAR AL CARRITO
-// ==========================
 async function agregarAlCarrito(idProducto) {
 
     const usuario = JSON.parse(sessionStorage.getItem("usuario"));
@@ -95,12 +90,10 @@ async function agregarAlCarrito(idProducto) {
 
     if (data.success) {
         actualizarNavbarCarrito();
-        refrescarCarrito(); // si estás en carrito
+        refrescarCarrito(); 
     }
 }
-// ==========================
-// CARGAR CARRITO (TABLA)
-// ==========================
+
 function cargarCarrito() {
 
     const tabla = document.querySelector("#tabla-carrito tbody");
@@ -148,20 +141,21 @@ function cargarCarrito() {
 
                     <td>S/ ${item.precioCompra.toFixed(2)}</td>
 
-                    <td>
-                        <button onclick="cambiarCantidad(${item.producto.idProducto}, -1)">-</button>
-                        ${item.cantidad}
-                        <button onclick="cambiarCantidad(${item.producto.idProducto}, 1)">+</button>
-                    </td>
+                    
+                        <td>
+    ${item.cantidad}
+</td>
+                   
 
                     <td>S/ ${item.subTotal.toFixed(2)}</td>
 
-                    <td>
-                        <button class="btn btn-danger btn-sm"
-                            onclick="eliminarItem(${item.producto.idProducto})">
-                            X
-                        </button>
-                    </td>
+           <td>
+    <button class="btn btn-danger btn-sm btn-trash"
+        onclick="eliminarItem(${item.producto.idProducto})">
+
+        <i class="bi bi-trash"></i>
+    </button>
+</td>
                 </tr>
             `;
                 });
@@ -173,9 +167,6 @@ function cargarCarrito() {
 }
 
 
-// ==========================
-// CAMBIAR CANTIDAD
-// ==========================
 function cambiarCantidad(idProducto, cambio) {
 
     let accion = cambio === 1 ? "incrementarCantidad" : "disminuirCantidad";
@@ -197,9 +188,6 @@ function cambiarCantidad(idProducto, cambio) {
 }
 
 
-// ==========================
-// ELIMINAR ITEM
-// ==========================
 function eliminarItem(idProducto) {
 
     fetch(`AppController?action=quitarProducto&idProducto=${idProducto}`, {
@@ -218,9 +206,6 @@ function eliminarItem(idProducto) {
 }
 
 
-// ==========================
-// ACTUALIZAR HEADER / NAVBAR
-// ==========================
 async function actualizarNavbarCarrito() {
 
     try {
@@ -247,9 +232,7 @@ async function actualizarNavbarCarrito() {
 }
 
 
-// ==========================
-// UI CENTRALIZADA
-// ==========================
+
 function actualizarUI(total, cantidad) {
 
     const totalEl = document.getElementById("total-carrito");
@@ -266,37 +249,29 @@ function actualizarUI(total, cantidad) {
 
 
 
-// ==========================
-// REFRESH GLOBAL
-// ==========================
 function refrescarCarrito() {
     cargarCarrito();
     actualizarNavbarCarrito();
 }
 
 
-// ==========================
-// INIT
-// ==========================
-document.addEventListener("DOMContentLoaded", () => {
+
+window.addEventListener("load", () => {
     refrescarCarrito();
 });
-// ==========================
-// 1. INICIAR COMPRA
-// ==========================
+
 function iniciarCompra() {
 
     fetch("AppController?action=listarCarrito")
             .then(res => res.json())
             .then(data => {
 
-                // ⚠️ tu backend devuelve "carrito"
                 if (!data.carrito || data.carrito.length === 0) {
                     Swal.fire("Carrito vacío");
                     return;
                 }
 
-                $('#modalDatosPedido').modal('show');
+                bootstrap.Modal.getOrCreateInstance(document.getElementById("modalDatosPedido")).show();
             })
             .catch(() => {
                 Swal.fire("Error", "No se pudo cargar el carrito");
@@ -304,9 +279,6 @@ function iniciarCompra() {
 }
 
 
-// ==========================
-// 2. GUARDAR DATOS CLIENTE
-// ==========================
 function pasarMetodoPago() {
 
     const pedido = {
@@ -316,7 +288,6 @@ function pasarMetodoPago() {
         direccionEntrega: $('#direccion').val()
     };
 
-    // validación básica (IMPORTANTE)
     if (!pedido.nombre || !pedido.dni || !pedido.telefono || !pedido.direccionEntrega) {
         Swal.fire("Completa todos los campos");
         return;
@@ -324,14 +295,11 @@ function pasarMetodoPago() {
 
     sessionStorage.setItem("pedidoTemp", JSON.stringify(pedido));
 
-    $('#modalDatosPedido').modal('hide');
-    $('#modalMetodoPago').modal('show');
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalDatosPedido")).hide();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalMetodoPago")).show();
 }
 
 
-// ==========================
-// 3. SELECCIONAR MÉTODO + GENERAR PEDIDO EN BD
-// ==========================
 function confirmarMetodoPago(metodo) {
 
     const pedido = JSON.parse(sessionStorage.getItem("pedidoTemp"));
@@ -372,8 +340,7 @@ function confirmarMetodoPago(metodo) {
 
                 sessionStorage.setItem("pedidoActual", JSON.stringify(pedidoFinal));
 
-                $('#modalMetodoPago').modal('hide');
-
+                bootstrap.Modal.getOrCreateInstance(document.getElementById("modalMetodoPago")).hide();
                 mostrarResumenPedido(pedidoFinal);
             });
 }
@@ -386,11 +353,10 @@ function mostrarResumenPedido(pedidoFinal) {
     $('#res-metodo').text(pedidoFinal.metodoPago);
     $('#res-codigo').text(pedidoFinal.codigo);
 
-    // ⚠️ corregido: ahora viene del backend si existe
     const total = pedidoFinal.total || $('#total-carrito').text();
     $('#res-total').text(total);
 
-    $('#modalResumenPedido').modal('show');
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalResumenPedido")).show();
 }
 
 
@@ -399,8 +365,8 @@ function mostrarResumenPedido(pedidoFinal) {
 // ==========================
 function abrirModalComprobante() {
 
-    $('#modalResumenPedido').modal('hide');
-    $('#modalComprobante').modal('show');
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalResumenPedido")).hide();
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("modalComprobante")).show();
 }
 
 
@@ -439,9 +405,8 @@ async function enviarComprobante() {
 
         if (data.success) {
 
-            $('#modalComprobante').modal('hide');
-
-            $('#modalFinal').modal('show');
+            bootstrap.Modal.getOrCreateInstance(document.getElementById("modalComprobante")).hide();
+            bootstrap.Modal.getOrCreateInstance(document.getElementById("modalFinal")).show();
 
             $('#final-codigo').text(pedido.codigo);
             $('#final-metodo').text(pedido.metodoPago);
@@ -461,9 +426,6 @@ async function enviarComprobante() {
 }
 
 
-// ==========================
-// 7. VOLVER AL MENÚ
-// ==========================
 function volverAlMenu() {
 
     sessionStorage.removeItem("pedidoTemp");
@@ -475,13 +437,4 @@ function volverAlMenu() {
 }
 
 
-// ==========================
-// 8. HELPERS (limpios)
-// ==========================
-function abrirModal(id) {
-    $(`#${id}`).modal('show');
-}
 
-function cerrarModal(id) {
-    $(`#${id}`).modal('hide');
-}
